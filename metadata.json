@@ -1,0 +1,5 @@
+{
+  "name": "Stitch CRM",
+  "description": "A comprehensive Real Estate CRM built with Next.js, Tailwind CSS, and Supabase.",
+  "requestFramePermissions": []
+}
