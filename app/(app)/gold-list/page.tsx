@@ -10,8 +10,9 @@ export default function GoldListPage() {
 
   useEffect(() => {
     const fetchGold = async () => {
-        const { data } = await supabase.from('leads').select('*').eq('stage', 'Calificado').order('budget_max', { ascending: false });
-        if(data) setLeads(data);
+        const { data } = await supabase.from('leads').eq('stage', 'Calificado').select('*');
+        const sorted = (data || []).slice().sort((a: any, b: any) => (b?.budget_max || 0) - (a?.budget_max || 0));
+        if(sorted) setLeads(sorted);
     }
     fetchGold();
   }, []);

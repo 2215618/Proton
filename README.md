@@ -1,32 +1,53 @@
-# Stitch CRM Clone
+# LG CRM Inmobiliario (Local-first + Supabase opcional)
 
-Full-stack Real Estate CRM.
+Este proyecto es una **app web CRM inmobiliaria** (Next.js App Router) basada en el prototipo exportado. 
 
-## Setup
+## Objetivo
 
-1. **Supabase:**
-   - Create a new project.
-   - Run the SQL in `supabase/schema.sql` in the SQL Editor.
-   - Create a test user in Auth.
-   - Manually insert an Org and link the user in `profiles` table to bypass invite flow for MVP.
+1) **Funciona sin Supabase (coste cero)**: datos demo + persistencia local.
+2) Más adelante puedes **conectar Supabase** sin romper la UI (misma estructura, mismas rutas).
 
-2. **Environment:**
-   - Copy `.env.example` to `.env.local` and fill in keys.
+## Rutas principales
 
-3. **Run:**
-   ```bash
-   npm install
-   npm run dev
-   ```
+- `/` login (modo local: acepta cualquier password no vacía)
+- `/dashboard` KPIs
+- `/kanban` pipeline de leads
+- `/inventory` propiedades
+- `/calendar` agenda de visitas
+- `/gold-list` lista dorada
+- `/tasks` tareas
+- `/chat` vista conversacional
+- `/reports` reportes
 
-## Stack
-- Next.js (App Router)
-- Tailwind CSS
-- Supabase
+## Ejecutar local (sin variables)
 
-## Deploy (Vercel)
-- Build command: `npm run build`
-- Output: (Next.js default)
-- Env vars:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+```bash
+npm install
+npm run dev
+```
+
+## Deploy en Vercel (sin variables)
+
+- Build Command: `npm run build`
+- Output: Next.js (auto)
+- **No necesitas variables** en modo local-first.
+
+## Activar Supabase (cuando quieras)
+
+1) Crea un proyecto en Supabase (plan free).
+2) Ejecuta `supabase/schema.sql` en el SQL Editor.
+3) Crea `.env.local` usando `.env.example` y agrega:
+
+```bash
+NEXT_PUBLIC_DATA_MODE=supabase
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+4) Redeploy en Vercel con esas variables.
+
+## Nota importante
+
+Para evitar errores de build (prerender) cuando NO hay keys, el archivo `lib/supabase/client.ts` cambia automáticamente a un **cliente mock** que:
+- Persiste en `localStorage` en el navegador.
+- Usa memoria en SSR/build (para que Next compile sin acceder a `window`).

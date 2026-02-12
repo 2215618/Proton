@@ -28,10 +28,16 @@ export default function DashboardPage() {
        const { count: newLeads } = await supabase.from('leads').select('*', { count: 'exact', head: true }); 
        // For MVP simulation without complex date queries on empty DB, we use raw counts or simplified logic
        
-       const { count: activeDeals } = await supabase.from('leads').select('*', { count: 'exact', head: true }).not('stage', 'in', '("Perdido","Cierre","Nuevo")');
+       const { count: activeDeals } = await supabase
+         .from('leads')
+         .not('stage', 'in', '("Perdido","Cierre","Nuevo")')
+         .select('*', { count: 'exact', head: true });
        
        // Calculate sums manually or via RPC in production.
-       const { data: dealsData } = await supabase.from('leads').select('budget_min, budget_max').not('stage', 'in', '("Perdido")');
+       const { data: dealsData } = await supabase
+         .from('leads')
+         .not('stage', 'in', '("Perdido")')
+         .select('budget_min, budget_max');
        const pipelineValue = dealsData?.reduce((acc, curr) => acc + ((curr.budget_min || 0) + (curr.budget_max || 0)) / 2, 0) || 0;
 
        setStats({
