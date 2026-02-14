@@ -2,41 +2,116 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================
+   Base / App background
+   (Premium, no layout changes)
+   ========================= */
 @layer base {
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-background-light text-text-main dark:bg-background-dark dark:text-surface-light;
+    min-height: 100vh;
   }
 }
 
+/* Subtle premium background (light) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(900px 520px at 18% -10%, rgba(19, 127, 236, 0.16), transparent 58%),
+    radial-gradient(760px 460px at 85% 0%, rgba(19, 127, 236, 0.10), transparent 55%),
+    linear-gradient(to bottom, #f8fafc, #f6f7f8);
+}
+
+/* Dark mode background */
+html.dark body::before {
+  background:
+    radial-gradient(900px 520px at 18% -10%, rgba(19, 127, 236, 0.22), transparent 60%),
+    radial-gradient(760px 460px at 85% 0%, rgba(19, 127, 236, 0.12), transparent 58%),
+    linear-gradient(to bottom, #0b1220, #101922);
+}
+
+/* Selection */
+::selection {
+  background: rgba(19, 127, 236, 0.22);
+}
+
+/* Utility: stable numeric alignment (for prices/KPIs) */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================
+   Scrollbar (thin + premium)
+   ========================= */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(100, 116, 139, 0.55);
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
+/* =========================
+   Microinteractions (safe)
+   ========================= */
 .rotting-pulse {
   animation: pulse-red 2s infinite;
 }
 
 @keyframes pulse-red {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
+  70% { box-shadow: 0 0 0 7px rgba(239, 68, 68, 0); }
   100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .rotting-pulse { animation: none !important; }
+}
+
+/* Hide scrollbar helper (used in some panels) */
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+
+/* =========================
+   Optional helpers (no breaking changes)
+   ========================= */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+html.dark .glass {
+  background: rgba(26, 38, 50, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.shadow-elev-1 { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 30px rgba(15, 23, 42, 0.06); }
+.shadow-elev-2 { box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 18px 48px rgba(15, 23, 42, 0.10); }
