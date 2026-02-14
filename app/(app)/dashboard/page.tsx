@@ -470,7 +470,8 @@ export default function DashboardPage() {
 
         {/* Activity */}
         <section className="grid grid-cols-1 xl:grid-cols-12 gap-6 mt-6">
-          <div className="xl:col-span-5 glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+          <div className="xl:col-span-5 glass relative rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-violet-500 to-indigo-500" />
             <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Próximas visitas</p>
               <Link href="/calendar" className="text-xs text-primary hover:underline">Ver agenda</Link>
@@ -499,7 +500,8 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="xl:col-span-4 glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+          <div className="xl:col-span-4 glass relative rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
             <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Tareas próximas</p>
               <Link href="/tasks" className="text-xs text-primary hover:underline">Ver tareas</Link>
@@ -538,7 +540,8 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="xl:col-span-3 glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+          <div className="xl:col-span-3 glass relative rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary to-blue-500" />
             <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Leads recientes</p>
               <Link href="/kanban" className="text-xs text-primary hover:underline">Ver pipeline</Link>
@@ -983,28 +986,51 @@ function KpiCard({
   badge: string;
   tone?: 'danger' | 'info' | 'success';
 }) {
+  const rail =
+    tone === 'danger'
+      ? 'from-rose-500 to-rose-600'
+      : tone === 'info'
+        ? 'from-violet-500 to-indigo-500'
+        : tone === 'success'
+          ? 'from-emerald-500 to-teal-500'
+          : 'from-primary to-blue-500';
+
   const toneStyles =
     tone === 'danger'
       ? 'bg-rose-50 text-rose-700 ring-rose-200/60'
       : tone === 'info'
-        ? 'bg-indigo-50 text-indigo-700 ring-indigo-200/60'
+        ? 'bg-violet-50 text-violet-700 ring-violet-200/60'
         : tone === 'success'
           ? 'bg-emerald-50 text-emerald-700 ring-emerald-200/60'
           : 'bg-primary/12 text-primary ring-primary/10';
 
+  const overlay =
+    tone === 'danger'
+      ? 'from-rose-50/70'
+      : tone === 'info'
+        ? 'from-violet-50/70'
+        : tone === 'success'
+          ? 'from-emerald-50/70'
+          : 'from-primary/10';
+
   return (
-    <div className="glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
-      <div className="p-4 flex items-start justify-between gap-3">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-elev-1">
+      {/* color rail */}
+      <div className={`absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${rail}`} />
+      {/* subtle tint */}
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${overlay} to-transparent`} />
+
+      <div className="relative p-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
-          <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white tabular-nums">{value}</p>
-          <span className="mt-1 inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full border bg-white/60 dark:bg-slate-900/20 border-slate-200/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-300">
+          <p className="text-xs text-slate-600">{label}</p>
+          <p className="mt-1 text-3xl font-bold text-slate-900 tabular-nums">{value}</p>
+          <span className="mt-1 inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full border border-slate-200/70 bg-white/70 text-slate-700">
             {badge}
           </span>
         </div>
 
-        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 ${toneStyles}`}>
-          <span className="material-icons">{icon}</span>
+        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 ${toneStyles} shadow-[0_1px_0_rgba(255,255,255,0.5)]`}>
+          <span className="material-icons text-[20px]">{icon}</span>
         </div>
       </div>
     </div>
@@ -1012,16 +1038,47 @@ function KpiCard({
 }
 
 function Metric({ title, value, sub, icon }: { title: string; value: string; sub: string; icon: string }) {
+  const map: Record<string, { rail: string; chip: string; overlay: string }> = {
+    sell: {
+      rail: 'from-primary to-blue-500',
+      chip: 'bg-blue-50 text-blue-700 ring-blue-200/60',
+      overlay: 'from-blue-50/70',
+    },
+    home_work: {
+      rail: 'from-violet-500 to-indigo-500',
+      chip: 'bg-violet-50 text-violet-700 ring-violet-200/60',
+      overlay: 'from-violet-50/70',
+    },
+    event_available: {
+      rail: 'from-teal-500 to-emerald-500',
+      chip: 'bg-emerald-50 text-emerald-700 ring-emerald-200/60',
+      overlay: 'from-emerald-50/70',
+    },
+    checklist: {
+      rail: 'from-amber-500 to-orange-500',
+      chip: 'bg-amber-50 text-amber-800 ring-amber-200/60',
+      overlay: 'from-amber-50/70',
+    },
+  };
+
+  const tone = map[icon] ?? {
+    rail: 'from-primary to-blue-500',
+    chip: 'bg-primary/12 text-primary ring-primary/10',
+    overlay: 'from-primary/10',
+  };
+
   return (
-    <div className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-4">
-      <div className="flex items-start justify-between gap-3">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white p-4">
+      <div className={`absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${tone.rail}`} />
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone.overlay} to-transparent`} />
+      <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs text-slate-500 dark:text-slate-400">{title}</p>
-          <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white tabular-nums">{value}</p>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{sub}</p>
+          <p className="text-xs text-slate-600">{title}</p>
+          <p className="mt-1 text-lg font-semibold text-slate-900 tabular-nums">{value}</p>
+          <p className="mt-1 text-xs text-slate-600">{sub}</p>
         </div>
-        <div className="h-10 w-10 rounded-2xl bg-primary/12 text-primary flex items-center justify-center ring-1 ring-primary/10 shrink-0">
-          <span className="material-icons">{icon}</span>
+        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 shrink-0 ${tone.chip}`}>
+          <span className="material-icons text-[20px]">{icon}</span>
         </div>
       </div>
     </div>
@@ -1029,18 +1086,60 @@ function Metric({ title, value, sub, icon }: { title: string; value: string; sub
 }
 
 function Shortcut({ href, icon, title, subtitle }: { href: string; icon: string; title: string; subtitle: string }) {
+  const map: Record<string, { rail: string; chip: string; overlay: string }> = {
+    inventory_2: {
+      rail: 'from-primary to-blue-500',
+      chip: 'bg-blue-50 text-blue-700 ring-blue-200/60',
+      overlay: 'from-blue-50/70',
+    },
+    person_add: {
+      rail: 'from-violet-500 to-fuchsia-500',
+      chip: 'bg-violet-50 text-violet-700 ring-violet-200/60',
+      overlay: 'from-violet-50/70',
+    },
+    event: {
+      rail: 'from-teal-500 to-emerald-500',
+      chip: 'bg-emerald-50 text-emerald-700 ring-emerald-200/60',
+      overlay: 'from-emerald-50/70',
+    },
+    task_alt: {
+      rail: 'from-amber-500 to-orange-500',
+      chip: 'bg-amber-50 text-amber-800 ring-amber-200/60',
+      overlay: 'from-amber-50/70',
+    },
+    star: {
+      rail: 'from-rose-500 to-pink-500',
+      chip: 'bg-rose-50 text-rose-700 ring-rose-200/60',
+      overlay: 'from-rose-50/70',
+    },
+    bar_chart: {
+      rail: 'from-slate-500 to-slate-700',
+      chip: 'bg-slate-50 text-slate-700 ring-slate-200/70',
+      overlay: 'from-slate-50/70',
+    },
+  };
+
+  const tone = map[icon] ?? {
+    rail: 'from-primary to-blue-500',
+    chip: 'bg-primary/12 text-primary ring-primary/10',
+    overlay: 'from-primary/10',
+  };
+
   return (
     <Link
       href={href}
-      className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-4 hover:shadow-elev-1 transition-all"
+      className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white p-4 transition-all hover:shadow-elev-1"
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className={`absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${tone.rail}`} />
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone.overlay} to-transparent`} />
+
+      <div className="relative flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{subtitle}</p>
+          <p className="text-sm font-semibold text-slate-900">{title}</p>
+          <p className="text-xs text-slate-600 truncate">{subtitle}</p>
         </div>
-        <div className="h-10 w-10 rounded-2xl bg-primary/12 text-primary flex items-center justify-center ring-1 ring-primary/10 shrink-0">
-          <span className="material-icons">{icon}</span>
+        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 shrink-0 ${tone.chip}`}>
+          <span className="material-icons text-[20px]">{icon}</span>
         </div>
       </div>
     </Link>

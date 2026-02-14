@@ -49,10 +49,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar />
 
       <main className="flex-1 overflow-hidden relative flex flex-col">
-        {/* Soft background accents (no estructura cambiada) */}
-        <div className="pointer-events-none absolute inset-0 opacity-70">
-          <div className="absolute -top-28 -left-28 h-72 w-72 rounded-full bg-primary/18 blur-3xl" />
-          <div className="absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-primary/12 blur-3xl" />
+        {/* Soft background accents (light premium) */}
+        <div className="pointer-events-none absolute inset-0 opacity-55">
+          <div className="absolute -top-24 -left-28 h-64 w-64 rounded-full bg-primary/10 blur-2xl" />
+          <div className="absolute top-8 -right-32 h-72 w-72 rounded-full bg-violet-500/10 blur-2xl" />
+          <div className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-amber-400/10 blur-2xl" />
         </div>
 
         <div className="relative flex-1 overflow-hidden flex flex-col">{children}</div>

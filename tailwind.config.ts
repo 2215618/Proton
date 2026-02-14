@@ -11,9 +11,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#137fec",
-        "primary-hover": "#0f65bd",
-        "background-light": "#f6f7f8",
+        // Light Premium palette (warm canvas + cobalt)
+        primary: "#246BFD",
+        "primary-hover": "#1F5DE0",
+        "background-light": "#F7F2EB",
         "background-dark": "#101922",
         "surface-light": "#ffffff",
         "surface-dark": "#1a2632",
