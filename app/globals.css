@@ -2,101 +2,142 @@
 @tailwind components;
 @tailwind utilities;
 
-/* =========================================================
-   LG CRM — Aurora Premium Light (Global Theme)
-   - NO cambia menús/rutas/textos, solo look & feel.
-   - Fondo aurora + grano sutil + utilidades glass.
-========================================================= */
+/* =========================
+   Base / App background
+   (Premium, no layout changes)
+   ========================= */
+@layer base {
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-:root {
-  /* Core */
-  --bg-base: 248 250 252;   /* #F8FAFC */
-  --text-main: 15 23 42;    /* #0F172A */
-  --text-muted: 100 116 139;/* #64748B */
-
-  /* Accents (Aurora Premium) */
-  --primary: 96 10 255;     /* #600AFF */
-  --accent-blue: 59 130 246;/* #3B82F6 */
-  --accent-teal: 20 184 166;/* #14B8A6 */
-  --accent-coral: 244 63 94;/* #F43F5E */
-
-  /* Glass surfaces */
-  --glass-bg: 255 255 255; /* white */
+  body {
+    @apply bg-background-light text-text-main dark:bg-background-dark dark:text-surface-light;
+    min-height: 100vh;
+  }
 }
 
-html, body {
-  height: 100%;
-}
-
-body {
-  min-height: 100%;
-  color: rgb(var(--text-main));
-  background: rgb(var(--bg-base));
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Aurora background layer (fixed, no layout impact) */
+/* Subtle premium background (light) — warm canvas + color accents */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -2;
   pointer-events: none;
+  z-index: -1;
   background:
-    radial-gradient(60rem circle at 0% 0%, rgba(96, 10, 255, 0.14), transparent 60%),
-    radial-gradient(55rem circle at 100% 10%, rgba(59, 130, 246, 0.12), transparent 55%),
-    radial-gradient(50rem circle at 12% 100%, rgba(20, 184, 166, 0.12), transparent 55%),
-    radial-gradient(60rem circle at 90% 90%, rgba(244, 63, 94, 0.10), transparent 60%),
-    linear-gradient(rgb(var(--bg-base)), rgb(var(--bg-base)));
+    radial-gradient(1100px 520px at 12% -10%, rgba(36, 107, 253, 0.12), transparent 60%),
+    radial-gradient(760px 420px at 92% 0%, rgba(124, 58, 237, 0.10), transparent 62%),
+    radial-gradient(760px 420px at 86% 78%, rgba(20, 184, 166, 0.12), transparent 62%),
+    radial-gradient(680px 380px at 18% 86%, rgba(245, 158, 11, 0.12), transparent 64%),
+    linear-gradient(to bottom, #f7f2eb, #f4efe8);
 }
 
-/* Subtle grain overlay (very low opacity) */
+/* Dark mode background (kept for compatibility) */
+html.dark body::before {
+  background:
+    radial-gradient(900px 520px at 18% -10%, rgba(36, 107, 253, 0.22), transparent 60%),
+    radial-gradient(760px 460px at 85% 0%, rgba(124, 58, 237, 0.14), transparent 58%),
+    linear-gradient(to bottom, #0b1220, #101922);
+}
+
+/* Selection */
+::selection {
+  background: rgba(36, 107, 253, 0.20);
+}
+
+/* Utility: stable numeric alignment (for prices/KPIs) */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================
+   Scrollbar (thin + premium)
+   ========================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.55);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* =========================
+   Microinteractions (safe)
+   ========================= */
+.rotting-pulse {
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
+  70% { box-shadow: 0 0 0 7px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotting-pulse { animation: none !important; }
+}
+
+/* Hide scrollbar helper (used in some panels) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* =========================
+   Optional helpers (no breaking changes)
+   ========================= */
+.glass {
+  /* "Real product" surface (less blur, more solid) */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.90));
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+html.dark .glass {
+  background: rgba(26, 38, 50, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.shadow-elev-1 { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 30px rgba(15, 23, 42, 0.06); }
+.shadow-elev-2 { box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 18px 48px rgba(15, 23, 42, 0.10); }
+
+/* =========================
+   Aurora grain overlay (premium)
+   - No cambia layout
+   - Sutil (como Stitch Aurora)
+   ========================= */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1;
   pointer-events: none;
+  z-index: -1;
+  /* SVG noise via feTurbulence */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.06;
+}
+
+html.dark body::after {
   opacity: 0.08;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
 }
 
-/* Optional: soften default focus ring globally */
-:focus-visible {
-  outline: none;
-}
-
-/* -----------------------------
-   Aurora Premium utilities
------------------------------- */
-
-/* Glass container (use on cards/panels/sections if needed) */
-.aurora-glass {
-  background: rgba(255, 255, 255, 0.70);
-  border: 1px solid rgba(255, 255, 255, 0.70);
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 16px; /* ~2xl */
-}
-
-/* Subtle divider line (for header strips) */
-.aurora-divider {
-  border-color: rgba(148, 163, 184, 0.25); /* slate-400/25 */
-}
-
-/* Premium hover lift (safe) */
-.aurora-lift {
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-}
-.aurora-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 45px rgba(2, 6, 23, 0.10);
-  border-color: rgba(255, 255, 255, 0.85);
-}
-
-/* Muted text helper (if you want consistent copy) */
-.aurora-muted {
-  color: rgb(var(--text-muted));
+@media (prefers-reduced-motion: reduce) {
+  body::after { opacity: 0.04; }
 }

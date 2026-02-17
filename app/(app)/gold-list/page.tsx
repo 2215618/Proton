@@ -129,7 +129,7 @@ export default function GoldListPage() {
 
     const gold = leadsAll
       .filter((x) => x.stage === 'Calificado')
-      .sort((a, b) => (scoreLead(b) - scoreLead(a)) || (b.created_at.localeCompare(a.created_at)));
+      .sort((a, b) => scoreLead(b) - scoreLead(a) || b.created_at.localeCompare(a.created_at));
 
     setAllLeads(leadsAll);
     setLeadsGold(gold);
@@ -195,7 +195,7 @@ export default function GoldListPage() {
     const items = properties
       .filter((p) => p.operation === op)
       .map((p) => {
-        const price = op === 'sale' ? (p.price_sale || 0) : (p.price_rent || 0);
+        const price = op === 'sale' ? p.price_sale || 0 : p.price_rent || 0;
         const inRange = withinRange(price, minAdj, maxAdj);
         const locScore = loc && p.location ? (p.location.toLowerCase().includes(loc.split(' ')[0]) ? 1 : 0) : 0;
         return { p, price, inRange, locScore };
@@ -265,58 +265,55 @@ export default function GoldListPage() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Header */}
-      <header className="h-16 glass border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="bg-amber-50 p-2 rounded-xl text-amber-700 ring-1 ring-amber-200/50">
-            <span className="material-icons">stars</span>
-          </div>
-
+      {/* Controls (sin header duplicado; AppTopbar es global en app/(app)/layout.tsx) */}
+      <div className="px-6 md:px-8 pt-6 md:pt-8 flex flex-col gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">
-              Gold List
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-2">
+              <span className="material-icons text-amber-600 text-[18px]">stars</span>
+              <h2 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight">Gold List</h2>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Confirmados con presupuesto ·{' '}
               <span className="font-semibold tabular-nums text-slate-900 dark:text-white">{totals.total}</span> clientes
             </p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 h-10 shadow-sm">
-            <span className="material-icons text-slate-400 text-[18px]">search</span>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
-              placeholder="Buscar cliente…"
-            />
+          <div className="flex flex-wrap items-center gap-2 justify-end">
+            <div className="hidden lg:flex items-center gap-2 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 h-10 shadow-elev-1">
+              <span className="material-icons text-slate-400 text-[18px]">search</span>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
+                placeholder="Buscar cliente…"
+              />
+            </div>
+
+            <select
+              value={opFilter}
+              onChange={(e) => setOpFilter(e.target.value as Op)}
+              className="h-10 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 px-3 text-sm shadow-elev-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 backdrop-blur-md"
+            >
+              <option value="all">Todos</option>
+              <option value="sale">Compra (USD)</option>
+              <option value="rent">Alquiler (S/)</option>
+            </select>
+
+            <Button variant="outline" className="h-10" onClick={fetchAll}>
+              <span className="material-icons text-[18px]">refresh</span>
+              Actualizar
+            </Button>
+
+            <Button className="h-10" onClick={() => setOpenAdd(true)}>
+              <span className="material-icons text-[18px]">add</span>
+              Añadir
+            </Button>
           </div>
-
-          <select
-            value={opFilter}
-            onChange={(e) => setOpFilter(e.target.value as Op)}
-            className="h-10 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-          >
-            <option value="all">Todos</option>
-            <option value="sale">Compra (USD)</option>
-            <option value="rent">Alquiler (S/)</option>
-          </select>
-
-          <Button variant="outline" className="h-10" onClick={fetchAll}>
-            <span className="material-icons text-[18px]">refresh</span>
-            Actualizar
-          </Button>
-
-          <Button className="h-10" onClick={() => setOpenAdd(true)}>
-            <span className="material-icons text-[18px]">add</span>
-            Añadir
-          </Button>
         </div>
-      </header>
+      </div>
 
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">
+      <main className="flex-1 overflow-y-auto px-6 md:px-8 pb-6 md:pb-8 pt-4">
         {/* Summary */}
         <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <SummaryCard icon="groups" title="Total" value={totals.total} sub="Clientes calificados" tone="primary" />
@@ -466,11 +463,7 @@ export default function GoldListPage() {
                   </p>
                 </div>
 
-                <Button
-                  onClick={() => handleAddToGold(l.id)}
-                  disabled={addingId === l.id}
-                  className="shrink-0"
-                >
+                <Button onClick={() => handleAddToGold(l.id)} disabled={addingId === l.id} className="shrink-0">
                   {addingId === l.id ? 'Añadiendo…' : 'Añadir'}
                 </Button>
               </div>
@@ -484,7 +477,9 @@ export default function GoldListPage() {
           </div>
 
           <div className="px-5 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-end">
-            <Button variant="secondary" onClick={() => setOpenAdd(false)}>Cerrar</Button>
+            <Button variant="secondary" onClick={() => setOpenAdd(false)}>
+              Cerrar
+            </Button>
           </div>
         </Modal>
       )}
@@ -493,14 +488,15 @@ export default function GoldListPage() {
       {openSuggest && suggestLead && (
         <Modal
           title="Sugerir propiedades"
-          subtitle={`${suggestLead.name} · ${opLabel(leadOp(suggestLead))} · ${formatLeadBudget(suggestLead, leadOp(suggestLead))}`}
+          subtitle={`${suggestLead.name} · ${opLabel(leadOp(suggestLead))} · ${formatLeadBudget(
+            suggestLead,
+            leadOp(suggestLead)
+          )}`}
         >
           <div className="p-4 space-y-3 max-h-[60vh] overflow-y-auto">
             <div className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 p-4">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Candidatas (top 6)</p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Selección por rango (±20%) y ubicación aproximada.
-              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Selección por rango (±20%) y ubicación aproximada.</p>
             </div>
 
             {suggestedProperties.map((p) => {
@@ -548,7 +544,9 @@ export default function GoldListPage() {
           </div>
 
           <div className="px-5 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-end gap-2">
-            <Button variant="secondary" onClick={() => setOpenSuggest(false)}>Cerrar</Button>
+            <Button variant="secondary" onClick={() => setOpenSuggest(false)}>
+              Cerrar
+            </Button>
           </div>
         </Modal>
       )}
@@ -592,7 +590,8 @@ export default function GoldListPage() {
                 {schedulePropertyId ? (
                   <>
                     {' '}
-                    · Propiedad: <span className="font-semibold text-slate-900 dark:text-white">{schedulePropertyId.substring(0, 6)}</span>
+                    · Propiedad:{' '}
+                    <span className="font-semibold text-slate-900 dark:text-white">{schedulePropertyId.substring(0, 6)}</span>
                   </>
                 ) : (
                   <>

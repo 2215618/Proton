@@ -8,10 +8,10 @@ export default function ChatPage() {
   // Se mantiene el apartado, sin agregar integraciones ni lógica externa.
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex-1 flex h-full overflow-hidden">
       {/* Left: Conversations */}
-      <aside className="w-[320px] shrink-0 border-r border-slate-200/60 dark:border-slate-700/60 bg-white/40 dark:bg-slate-900/10 backdrop-blur supports-[backdrop-filter]:bg-white/30">
-        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 glass">
+      <aside className="w-[320px] shrink-0 border-r border-slate-200/60 dark:border-slate-700/60 bg-white/40 dark:bg-slate-900/10 backdrop-blur supports-[backdrop-filter]:bg-white/30 flex flex-col">
+        <div className="h-14 px-4 flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 glass">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-slate-900 dark:text-white">Conversaciones</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">Vista previa (sin WhatsApp)</p>
@@ -36,7 +36,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        <div className="h-[calc(100%-8rem)] overflow-y-auto">
+        <div className="flex-1 overflow-y-auto">
           {/* Item activo */}
           <button className="w-full text-left px-4 py-3 border-b border-slate-200/40 dark:border-slate-700/40 hover:bg-white/60 dark:hover:bg-slate-900/20 transition-colors border-l-4 border-l-primary bg-primary/5">
             <div className="flex items-start justify-between gap-3">
@@ -61,10 +61,11 @@ export default function ChatPage() {
 
       {/* Center: Chat */}
       <main className="flex-1 flex flex-col min-w-0 bg-[radial-gradient(1200px_circle_at_20%_-10%,rgba(37,99,235,0.12),transparent_55%),radial-gradient(900px_circle_at_90%_0%,rgba(59,130,246,0.10),transparent_55%)]">
-        <header className="h-16 px-6 flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 glass shrink-0">
+        {/* Sub-header de conversación (no es el AppTopbar global) */}
+        <header className="h-14 px-6 flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 glass shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="h-10 w-10 rounded-2xl bg-primary/12 text-primary ring-1 ring-primary/10 flex items-center justify-center">
-              <span className="material-icons">person</span>
+            <div className="h-9 w-9 rounded-2xl bg-primary/12 text-primary ring-1 ring-primary/10 flex items-center justify-center">
+              <span className="material-icons text-[18px]">person</span>
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">Juan Perez</p>
@@ -80,16 +81,29 @@ export default function ChatPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Link href="/tasks">
+            <Link href="/tasks" className="hidden sm:inline-flex">
               <Button variant="outline" className="h-10">
                 <span className="material-icons text-[18px]">task_alt</span>
                 Tareas
               </Button>
             </Link>
-            <Link href="/calendar">
+
+            <Link href="/calendar" className="hidden sm:inline-flex">
               <Button variant="outline" className="h-10">
                 <span className="material-icons text-[18px]">event</span>
                 Agenda
+              </Button>
+            </Link>
+
+            {/* Icon-only en mobile */}
+            <Link href="/tasks" className="sm:hidden">
+              <Button variant="outline" className="h-10 w-10 p-0" aria-label="Tareas">
+                <span className="material-icons text-[18px]">task_alt</span>
+              </Button>
+            </Link>
+            <Link href="/calendar" className="sm:hidden">
+              <Button variant="outline" className="h-10 w-10 p-0" aria-label="Agenda">
+                <span className="material-icons text-[18px]">event</span>
               </Button>
             </Link>
           </div>
@@ -161,12 +175,12 @@ export default function ChatPage() {
       </main>
 
       {/* Right: Contact info */}
-      <aside className="hidden xl:block w-[320px] shrink-0 border-l border-slate-200/60 dark:border-slate-700/60 bg-white/40 dark:bg-slate-900/10 backdrop-blur supports-[backdrop-filter]:bg-white/30">
-        <div className="h-16 px-6 flex items-center border-b border-slate-200/60 dark:border-slate-700/60 glass">
+      <aside className="hidden xl:flex w-[320px] shrink-0 border-l border-slate-200/60 dark:border-slate-700/60 bg-white/40 dark:bg-slate-900/10 backdrop-blur supports-[backdrop-filter]:bg-white/30 flex-col">
+        <div className="h-14 px-6 flex items-center border-b border-slate-200/60 dark:border-slate-700/60 glass">
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Info contacto</p>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="flex-1 overflow-y-auto p-6 space-y-5">
           <div className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-4">
             <p className="text-xs text-slate-500 dark:text-slate-400">Email</p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white mt-1">juan.perez@gmail.com</p>

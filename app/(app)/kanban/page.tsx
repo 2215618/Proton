@@ -208,42 +208,50 @@ export default function KanbanPage() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Header (premium, sticky, no structural change) */}
-      <header className="h-16 glass border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between px-6 flex-shrink-0 z-10 sticky top-0">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="bg-primary/12 p-2 rounded-xl text-primary ring-1 ring-primary/10">
-            <span className="material-icons">view_kanban</span>
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">
-              Pipeline de Leads
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Arrastra tarjetas entre etapas. Rotting te ayuda a priorizar.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 h-10 shadow-sm">
-            <span className="material-icons text-slate-400 text-[18px]">search</span>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="bg-transparent outline-none text-sm w-56 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
-              placeholder="Buscar lead, zona, teléfono…"
-            />
+      {/* Controls (sin header; AppTopbar es global en app/(app)/layout.tsx) */}
+      <div className="px-6 md:px-8 pt-6 md:pt-8 flex flex-col gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="bg-primary/12 p-2 rounded-xl text-primary ring-1 ring-primary/10">
+              <span className="material-icons">view_kanban</span>
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">
+                Pipeline de Leads
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Arrastra tarjetas entre etapas. Rotting te ayuda a priorizar.
+              </p>
+            </div>
           </div>
 
-          <Button onClick={() => setOpenNewLead(true)}>
-            <span className="material-icons text-[18px]">add</span>
-            Nuevo Lead
-          </Button>
+          <div className="flex items-center gap-2 justify-end flex-wrap">
+            <div className="hidden md:flex items-center gap-2 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/20 px-3 h-10 shadow-elev-1 backdrop-blur-md">
+              <span className="material-icons text-slate-400 text-[18px]">search</span>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                className="bg-transparent outline-none text-sm w-56 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
+                placeholder="Buscar lead, zona, teléfono…"
+              />
+            </div>
+
+            <Button variant="outline" className="h-10" onClick={fetchAll}>
+              <span className="material-icons text-[18px]">refresh</span>
+              Actualizar
+            </Button>
+
+            <Button className="h-10" onClick={() => setOpenNewLead(true)}>
+              <span className="material-icons text-[18px]">add</span>
+              Nuevo Lead
+            </Button>
+          </div>
         </div>
-      </header>
+      </div>
+
 
       {/* Columns */}
-      <div className="flex-1 overflow-x-auto overflow-y-hidden p-6 md:p-8">
+      <div className="flex-1 overflow-x-auto overflow-y-hidden px-6 md:px-8 pb-6 md:pb-8 pt-4">
         <div className="flex h-full gap-5 min-w-max">
           {STAGES.map((stage) => (
             <div

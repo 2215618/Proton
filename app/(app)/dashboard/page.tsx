@@ -315,8 +315,10 @@ export default function DashboardPage() {
       bedrooms: propertyForm.bedrooms ? Number(propertyForm.bedrooms) : null,
       bathrooms: propertyForm.bathrooms ? Number(propertyForm.bathrooms) : null,
       area_sqm: propertyForm.area_sqm ? Number(propertyForm.area_sqm) : null,
-      price_sale: propertyForm.operation === 'sale' ? (propertyForm.price_sale ? Number(propertyForm.price_sale) : null) : null,
-      price_rent: propertyForm.operation === 'rent' ? (propertyForm.price_rent ? Number(propertyForm.price_rent) : null) : null,
+      price_sale:
+        propertyForm.operation === 'sale' ? (propertyForm.price_sale ? Number(propertyForm.price_sale) : null) : null,
+      price_rent:
+        propertyForm.operation === 'rent' ? (propertyForm.price_rent ? Number(propertyForm.price_rent) : null) : null,
       amenities: null,
     };
 
@@ -387,72 +389,54 @@ export default function DashboardPage() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Header */}
-      <header className="h-16 glass border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
-        <div className="min-w-0">
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight">Dashboard</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Resumen de actividad ·{' '}
-            <span className="font-semibold text-slate-900 dark:text-white">LG CRM</span>{' '}
-            <span className="text-slate-400">·</span> modo demo (local-first)
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button variant="outline" className="h-10" onClick={fetchAll}>
-            <span className="material-icons text-[18px]">refresh</span>
-            Actualizar
-          </Button>
-          <Button className="h-10" onClick={openNewModal}>
-            <span className="material-icons text-[18px]">add</span>
-            Nuevo
-          </Button>
-        </div>
-      </header>
+      {/* Acción superior (NO header, para evitar duplicados con AppTopbar global) */}
+      <div className="px-6 md:px-8 pt-6 md:pt-8 flex items-center justify-end gap-2">
+        <Button variant="outline" className="h-10" onClick={fetchAll}>
+          <span className="material-icons text-[18px]">refresh</span>
+          Actualizar
+        </Button>
+        <Button className="h-10" onClick={openNewModal}>
+          <span className="material-icons text-[18px]">add</span>
+          Nuevo
+        </Button>
+      </div>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">
+      <main className="flex-1 overflow-y-auto px-6 md:px-8 pb-6 md:pb-8 pt-4">
         {/* KPI grid */}
         <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <KpiCard icon="person_add" label="Nuevos leads (7d)" value={stats.newLeads7d} badge="Captación" />
-          <KpiCard icon="warning" label="Sin contacto" value={stats.uncontacted} badge="Prioridad" tone="danger" />
+          <KpiCard icon="phone_missed" label="Sin contacto" value={stats.uncontacted} badge="Prioridad" tone="danger" />
           <KpiCard icon="location_on" label="Visitas hoy" value={stats.visitsToday} badge="Agenda" tone="info" />
           <KpiCard icon="task_alt" label="Tareas hoy" value={stats.tasksToday} badge="Operación" tone="success" />
         </section>
 
         {/* Value row */}
         <section className="grid grid-cols-1 xl:grid-cols-12 gap-6 mt-6">
-          <div className="xl:col-span-8 glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
+          <div className="xl:col-span-8 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary to-indigo-500" />
+            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="material-icons text-primary text-[18px]">insights</span>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">Indicadores clave</p>
               </div>
               <span className="text-xs text-slate-500 dark:text-slate-400">
-                Próx 7 días: <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{stats.visitsWeek}</span> visitas
+                Próx 7 días:{' '}
+                <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{stats.visitsWeek}</span> visitas
               </span>
             </div>
 
             <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Metric
-                title="Pipeline activo"
-                value={`${stats.activePipeline}`}
-                sub="Leads en seguimiento (excluye perdido/cierre)"
-                icon="track_changes"
-              />
-              <Metric
-                title="Inventario activo"
-                value={`${formatMoney(stats.activeSaleUSD, 'USD')} + ${formatMoney(stats.activeRentPEN, 'PEN')}`}
-                sub="Venta (USD) + Alquiler (S/)"
-                icon="home_work"
-              />
+              <Metric title="Pipeline activo" value={`${stats.activePipeline}`} sub="Leads en seguimiento (excluye perdido/cierre)" icon="track_changes" />
+              <Metric title="Inventario activo" value={`${formatMoney(stats.activeSaleUSD, 'USD')} + ${formatMoney(stats.activeRentPEN, 'PEN')}`} sub="Venta (USD) + Alquiler (S/)" icon="home_work" />
               <Metric title="Tareas vencidas" value={`${stats.overdueTasks}`} sub="Pendientes con fecha pasada" icon="assignment_late" />
               <Metric title="Visitas semanales" value={`${stats.visitsWeek}`} sub="Programadas (hoy → +7 días)" icon="event" />
             </div>
           </div>
 
-          <div className="xl:col-span-4 glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20">
+          <div className="xl:col-span-4 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary to-indigo-500" />
+            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Atajos</p>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Accede rápido a módulos clave.</p>
             </div>
@@ -470,19 +454,25 @@ export default function DashboardPage() {
 
         {/* Activity */}
         <section className="grid grid-cols-1 xl:grid-cols-12 gap-6 mt-6">
-          <div className="xl:col-span-5 glass relative rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+          <div className="xl:col-span-5 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
             <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-violet-500 to-indigo-500" />
-            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Próximas visitas</p>
-              <Link href="/calendar" className="text-xs text-primary hover:underline">Ver agenda</Link>
+              <Link href="/calendar" className="text-xs text-primary hover:underline">
+                Ver agenda
+              </Link>
             </div>
 
             <div className="p-4 space-y-2">
               {nextVisits.map((v) => (
-                <div key={v.id} className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-3">
+                <div
+                  key={v.id}
+                  className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-3 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all"
+                >
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                      Lead {v.lead_id.substring(0, 6)}{v.property_id ? ` · Prop ${v.property_id.substring(0, 6)}` : ''}
+                      Lead {v.lead_id.substring(0, 6)}
+                      {v.property_id ? ` · Prop ${v.property_id.substring(0, 6)}` : ''}
                     </p>
                     <span className="text-xs text-slate-500 dark:text-slate-400 tabular-nums whitespace-nowrap">
                       {formatDateShort(v.scheduled_for)} · {formatTimeShort(v.scheduled_for)}
@@ -500,16 +490,21 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="xl:col-span-4 glass relative rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+          <div className="xl:col-span-4 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
             <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
-            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Tareas próximas</p>
-              <Link href="/tasks" className="text-xs text-primary hover:underline">Ver tareas</Link>
+              <Link href="/tasks" className="text-xs text-primary hover:underline">
+                Ver tareas
+              </Link>
             </div>
 
             <div className="p-4 space-y-2">
               {nextTasks.map((t) => (
-                <div key={t.id} className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-3">
+                <div
+                  key={t.id}
+                  className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-3 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all"
+                >
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{t.title}</p>
                     <span
@@ -540,16 +535,21 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="xl:col-span-3 glass relative rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
+          <div className="xl:col-span-3 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
             <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary to-blue-500" />
-            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-900 dark:text-white">Leads recientes</p>
-              <Link href="/kanban" className="text-xs text-primary hover:underline">Ver pipeline</Link>
+              <Link href="/kanban" className="text-xs text-primary hover:underline">
+                Ver pipeline
+              </Link>
             </div>
 
             <div className="p-4 space-y-2">
               {latestLeads.map((l) => (
-                <div key={l.id} className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-3">
+                <div
+                  key={l.id}
+                  className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-3 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all"
+                >
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{l.name}</p>
                     <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/20">
@@ -557,7 +557,8 @@ export default function DashboardPage() {
                     </span>
                   </div>
                   <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 truncate">
-                    {l.location || '—'}{l.source ? ` · ${l.source}` : ''}
+                    {l.location || '—'}
+                    {l.source ? ` · ${l.source}` : ''}
                   </p>
                 </div>
               ))}
@@ -572,13 +573,13 @@ export default function DashboardPage() {
         </section>
 
         {loading && (
-          <div className="fixed bottom-4 right-4 glass rounded-2xl px-4 py-3 shadow-elev-2 border border-slate-200/60 dark:border-slate-700/60">
+          <div className="fixed bottom-4 right-4 rounded-2xl px-4 py-3 shadow-elev-2 border border-white/70 dark:border-slate-700/60 bg-white/80 dark:bg-surface-dark/70 backdrop-blur-md">
             <div className="text-xs text-slate-600 dark:text-slate-300">Cargando dashboard…</div>
           </div>
         )}
       </main>
 
-      {/* Modal: Nuevo */}
+      {/* Modal: Nuevo (se mantiene, solo look premium) */}
       {openNew && (
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onClick={() => setOpenNew(false)} />
@@ -603,10 +604,10 @@ export default function DashboardPage() {
 
               <div className="px-5 py-4">
                 <div className="flex flex-wrap gap-2">
-                  <Pill active={newKind === 'lead'} onClick={() => { resetModal('lead'); }} icon="person_add" label="Lead" />
-                  <Pill active={newKind === 'property'} onClick={() => { resetModal('property'); }} icon="home_work" label="Propiedad" />
-                  <Pill active={newKind === 'visit'} onClick={() => { resetModal('visit'); }} icon="event" label="Visita" />
-                  <Pill active={newKind === 'task'} onClick={() => { resetModal('task'); }} icon="task_alt" label="Tarea" />
+                  <Pill active={newKind === 'lead'} onClick={() => resetModal('lead')} icon="person_add" label="Lead" />
+                  <Pill active={newKind === 'property'} onClick={() => resetModal('property')} icon="home_work" label="Propiedad" />
+                  <Pill active={newKind === 'visit'} onClick={() => resetModal('visit')} icon="event" label="Visita" />
+                  <Pill active={newKind === 'task'} onClick={() => resetModal('task')} icon="task_alt" label="Tarea" />
                 </div>
 
                 {/* Forms */}
@@ -836,7 +837,8 @@ export default function DashboardPage() {
                             .sort((a, b) => a.name.localeCompare(b.name))
                             .map((l) => (
                               <option key={l.id} value={l.id}>
-                                {l.name}{l.phone ? ` · ${l.phone}` : ''}
+                                {l.name}
+                                {l.phone ? ` · ${l.phone}` : ''}
                               </option>
                             ))}
                         </select>
@@ -851,7 +853,8 @@ export default function DashboardPage() {
                           <option value="">— Sin propiedad —</option>
                           {properties.map((p) => (
                             <option key={p.id} value={p.id}>
-                              {p.title}{p.location ? ` · ${p.location}` : ''}
+                              {p.title}
+                              {p.location ? ` · ${p.location}` : ''}
                             </option>
                           ))}
                         </select>
@@ -929,13 +932,15 @@ export default function DashboardPage() {
                               .sort((a, b) => a.name.localeCompare(b.name))
                               .map((l) => (
                                 <option key={l.id} value={l.id}>
-                                  {l.name}{l.phone ? ` · ${l.phone}` : ''}
+                                  {l.name}
+                                  {l.phone ? ` · ${l.phone}` : ''}
                                 </option>
                               ))}
                           {taskForm.related_type === 'deal' &&
                             properties.map((p) => (
                               <option key={p.id} value={p.id}>
-                                {p.title}{p.location ? ` · ${p.location}` : ''}
+                                {p.title}
+                                {p.location ? ` · ${p.location}` : ''}
                               </option>
                             ))}
                         </select>
@@ -973,6 +978,8 @@ export default function DashboardPage() {
   );
 }
 
+/* ===== UI helpers (Aurora Premium styles) ===== */
+
 function KpiCard({
   icon,
   label,
@@ -988,48 +995,44 @@ function KpiCard({
 }) {
   const rail =
     tone === 'danger'
-      ? 'from-rose-500 to-rose-600'
+      ? 'from-rose-500 to-pink-500'
       : tone === 'info'
         ? 'from-violet-500 to-indigo-500'
         : tone === 'success'
           ? 'from-emerald-500 to-teal-500'
-          : 'from-primary to-blue-500';
+          : 'from-primary to-indigo-500';
 
-  const toneStyles =
+  const chip =
+    tone === 'danger'
+      ? 'bg-rose-50 text-rose-700 border-rose-200/60'
+      : tone === 'info'
+        ? 'bg-violet-50 text-violet-700 border-violet-200/60'
+        : tone === 'success'
+          ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+          : 'bg-primary/10 text-primary border-primary/20';
+
+  const iconBox =
     tone === 'danger'
       ? 'bg-rose-50 text-rose-700 ring-rose-200/60'
       : tone === 'info'
         ? 'bg-violet-50 text-violet-700 ring-violet-200/60'
         : tone === 'success'
           ? 'bg-emerald-50 text-emerald-700 ring-emerald-200/60'
-          : 'bg-primary/12 text-primary ring-primary/10';
-
-  const overlay =
-    tone === 'danger'
-      ? 'from-rose-50/70'
-      : tone === 'info'
-        ? 'from-violet-50/70'
-        : tone === 'success'
-          ? 'from-emerald-50/70'
-          : 'from-primary/10';
+          : 'bg-primary/10 text-primary ring-primary/20';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-elev-1">
-      {/* color rail */}
-      <div className={`absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${rail}`} />
-      {/* subtle tint */}
-      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${overlay} to-transparent`} />
-
-      <div className="relative p-4 flex items-start justify-between gap-3">
+    <div className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
+      <div className={`pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r ${rail}`} />
+      <div className="p-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs text-slate-600">{label}</p>
-          <p className="mt-1 text-3xl font-bold text-slate-900 tabular-nums">{value}</p>
-          <span className="mt-1 inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full border border-slate-200/70 bg-white/70 text-slate-700">
+          <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
+          <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white tabular-nums">{value}</p>
+          <span className={`mt-2 inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full border ${chip}`}>
             {badge}
           </span>
         </div>
 
-        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 ${toneStyles} shadow-[0_1px_0_rgba(255,255,255,0.5)]`}>
+        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 shrink-0 ${iconBox}`}>
           <span className="material-icons text-[20px]">{icon}</span>
         </div>
       </div>
@@ -1038,46 +1041,34 @@ function KpiCard({
 }
 
 function Metric({ title, value, sub, icon }: { title: string; value: string; sub: string; icon: string }) {
-  const map: Record<string, { rail: string; chip: string; overlay: string }> = {
-    sell: {
-      rail: 'from-primary to-blue-500',
-      chip: 'bg-blue-50 text-blue-700 ring-blue-200/60',
-      overlay: 'from-blue-50/70',
-    },
-    home_work: {
-      rail: 'from-violet-500 to-indigo-500',
-      chip: 'bg-violet-50 text-violet-700 ring-violet-200/60',
-      overlay: 'from-violet-50/70',
-    },
-    event_available: {
-      rail: 'from-teal-500 to-emerald-500',
-      chip: 'bg-emerald-50 text-emerald-700 ring-emerald-200/60',
-      overlay: 'from-emerald-50/70',
-    },
-    checklist: {
-      rail: 'from-amber-500 to-orange-500',
-      chip: 'bg-amber-50 text-amber-800 ring-amber-200/60',
-      overlay: 'from-amber-50/70',
-    },
-  };
+  const rail =
+    icon === 'assignment_late'
+      ? 'from-rose-500 to-pink-500'
+      : icon === 'event'
+        ? 'from-teal-500 to-emerald-500'
+        : icon === 'home_work'
+          ? 'from-violet-500 to-indigo-500'
+          : 'from-primary to-indigo-500';
 
-  const tone = map[icon] ?? {
-    rail: 'from-primary to-blue-500',
-    chip: 'bg-primary/12 text-primary ring-primary/10',
-    overlay: 'from-primary/10',
-  };
+  const iconBox =
+    icon === 'assignment_late'
+      ? 'bg-rose-50 text-rose-700 ring-rose-200/60'
+      : icon === 'event'
+        ? 'bg-emerald-50 text-emerald-700 ring-emerald-200/60'
+        : icon === 'home_work'
+          ? 'bg-violet-50 text-violet-700 ring-violet-200/60'
+          : 'bg-primary/10 text-primary ring-primary/20';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white p-4">
-      <div className={`absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${tone.rail}`} />
-      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone.overlay} to-transparent`} />
-      <div className="relative flex items-start justify-between gap-3">
+    <div className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-4 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all relative overflow-hidden">
+      <div className={`pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r ${rail}`} />
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs text-slate-600">{title}</p>
-          <p className="mt-1 text-lg font-semibold text-slate-900 tabular-nums">{value}</p>
-          <p className="mt-1 text-xs text-slate-600">{sub}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{title}</p>
+          <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white tabular-nums">{value}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{sub}</p>
         </div>
-        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 shrink-0 ${tone.chip}`}>
+        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 shrink-0 ${iconBox}`}>
           <span className="material-icons text-[20px]">{icon}</span>
         </div>
       </div>
@@ -1086,72 +1077,38 @@ function Metric({ title, value, sub, icon }: { title: string; value: string; sub
 }
 
 function Shortcut({ href, icon, title, subtitle }: { href: string; icon: string; title: string; subtitle: string }) {
-  const map: Record<string, { rail: string; chip: string; overlay: string }> = {
-    inventory_2: {
-      rail: 'from-primary to-blue-500',
-      chip: 'bg-blue-50 text-blue-700 ring-blue-200/60',
-      overlay: 'from-blue-50/70',
-    },
-    person_add: {
-      rail: 'from-violet-500 to-fuchsia-500',
-      chip: 'bg-violet-50 text-violet-700 ring-violet-200/60',
-      overlay: 'from-violet-50/70',
-    },
-    event: {
-      rail: 'from-teal-500 to-emerald-500',
-      chip: 'bg-emerald-50 text-emerald-700 ring-emerald-200/60',
-      overlay: 'from-emerald-50/70',
-    },
-    task_alt: {
-      rail: 'from-amber-500 to-orange-500',
-      chip: 'bg-amber-50 text-amber-800 ring-amber-200/60',
-      overlay: 'from-amber-50/70',
-    },
-    star: {
-      rail: 'from-rose-500 to-pink-500',
-      chip: 'bg-rose-50 text-rose-700 ring-rose-200/60',
-      overlay: 'from-rose-50/70',
-    },
-    bar_chart: {
-      rail: 'from-slate-500 to-slate-700',
-      chip: 'bg-slate-50 text-slate-700 ring-slate-200/70',
-      overlay: 'from-slate-50/70',
-    },
-  };
-
-  const tone = map[icon] ?? {
-    rail: 'from-primary to-blue-500',
-    chip: 'bg-primary/12 text-primary ring-primary/10',
-    overlay: 'from-primary/10',
-  };
+  const rail =
+    icon === 'stars'
+      ? 'from-amber-500 to-orange-500'
+      : icon === 'view_kanban'
+        ? 'from-violet-500 to-fuchsia-500'
+        : icon === 'event'
+          ? 'from-teal-500 to-emerald-500'
+          : icon === 'task'
+            ? 'from-rose-500 to-pink-500'
+            : icon === 'bar_chart'
+              ? 'from-slate-500 to-slate-700'
+              : 'from-primary to-indigo-500';
 
   return (
     <Link
       href={href}
-      className="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white p-4 transition-all hover:shadow-elev-1"
+      className="group rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-3 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all relative overflow-hidden"
     >
-      <div className={`absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${tone.rail}`} />
-      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone.overlay} to-transparent`} />
-
-      <div className="relative flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-slate-900">{title}</p>
-          <p className="text-xs text-slate-600 truncate">{subtitle}</p>
-        </div>
-        <div className={`h-10 w-10 rounded-2xl flex items-center justify-center ring-1 shrink-0 ${tone.chip}`}>
+      <div className={`pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r ${rail}`} />
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 rounded-2xl text-white bg-gradient-to-tr from-primary via-blue-500 to-indigo-500 shadow-elev-1 ring-1 ring-white/20 flex items-center justify-center">
           <span className="material-icons text-[20px]">{icon}</span>
         </div>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{subtitle}</p>
+        </div>
+        <span className="ml-auto material-icons text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-colors">
+          chevron_right
+        </span>
       </div>
     </Link>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">{label}</div>
-      {children}
-    </div>
   );
 }
 
@@ -1160,14 +1117,24 @@ function Pill({ active, onClick, icon, label }: { active: boolean; onClick: () =
     <button
       onClick={onClick}
       className={[
-        'h-10 px-3 rounded-xl border text-sm shadow-sm transition-colors flex items-center gap-2',
+        'h-10 px-3 rounded-2xl border text-sm font-semibold inline-flex items-center gap-2 transition-colors',
         active
-          ? 'border-primary/30 bg-primary/10 text-primary'
-          : 'border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-200 hover:bg-white/70 dark:hover:bg-slate-900/30',
+          ? 'bg-primary/10 text-primary border-primary/20'
+          : 'bg-white/60 dark:bg-slate-900/20 text-slate-700 dark:text-slate-200 border-slate-200/60 dark:border-slate-700/60 hover:bg-white/80 dark:hover:bg-slate-900/30',
       ].join(' ')}
+      type="button"
     >
       <span className="material-icons text-[18px]">{icon}</span>
       {label}
     </button>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <div className="text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">{label}</div>
+      {children}
+    </label>
   );
 }

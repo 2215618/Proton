@@ -204,33 +204,36 @@ export default function TasksPage() {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <header className="h-16 glass border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
+      <header className="h-16 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0 bg-white/70 dark:bg-surface-dark/55 backdrop-blur-md border-b border-white/55 dark:border-slate-700/60">
         <div className="min-w-0">
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight">Tareas</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Total: <span className="font-semibold tabular-nums text-slate-900 dark:text-white">{totals.total}</span> ·
-            Abiertas: <span className="font-semibold tabular-nums text-slate-900 dark:text-white">{totals.open}</span> ·
-            Hechas: <span className="font-semibold tabular-nums text-slate-900 dark:text-white">{totals.done}</span>
+          <div className="flex items-center gap-2">
+            <span className="material-icons text-primary text-[18px]">task_alt</span>
+            <h1 className="text-lg sm:text-xl font-semibold text-text-main dark:text-white tracking-tight">Tareas</h1>
+          </div>
+          <p className="text-xs text-text-muted dark:text-slate-300/80 mt-1">
+            Total: <span className="font-semibold tabular-nums text-text-main dark:text-white">{totals.total}</span> · Abiertas:{' '}
+            <span className="font-semibold tabular-nums text-text-main dark:text-white">{totals.open}</span> · Hechas:{' '}
+            <span className="font-semibold tabular-nums text-text-main dark:text-white">{totals.done}</span>
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="hidden lg:flex items-center gap-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 h-10 shadow-sm">
+          <div className="hidden lg:flex items-center gap-2 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 h-10 shadow-elev-1">
             <span className="material-icons text-slate-400 text-[18px]">search</span>
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
+              className="bg-transparent outline-none text-sm w-64 placeholder:text-text-muted/70 text-text-main dark:text-slate-100"
               placeholder="Buscar tareas…"
             />
           </div>
 
           <button
             className={[
-              'h-10 px-3 rounded-xl border text-sm shadow-sm transition-colors',
+              'h-10 px-4 rounded-2xl border text-sm shadow-elev-1 transition-colors backdrop-blur-md',
               onlyOpen
-                ? 'border-primary/30 bg-primary/10 text-primary'
-                : 'border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-200',
+                ? 'border-primary/25 bg-primary/10 text-primary ring-1 ring-primary/10'
+                : 'border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 text-text-main dark:text-slate-200',
             ].join(' ')}
             onClick={() => setOnlyOpen((v) => !v)}
           >
@@ -244,16 +247,17 @@ export default function TasksPage() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">
+      <main className="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
           {/* Sections */}
           <section className="xl:col-span-8 space-y-6">
             {(Object.keys(bySection) as Section[]).map((sec) => (
               <div
                 key={sec}
-                className="glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden"
+                className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative"
               >
-                <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between bg-white/35 dark:bg-slate-900/20">
+                <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary to-indigo-500" />
+                <div className="px-5 py-4 border-b border-white/55 dark:border-slate-700/60 flex items-center justify-between bg-white/55 dark:bg-slate-900/20">
                   <div className="flex items-center gap-2">
                     <span className={`text-xs font-semibold tracking-wider uppercase ${sectionTone(sec)}`}>
                       {sectionTitle(sec)}
@@ -268,7 +272,7 @@ export default function TasksPage() {
                   {bySection[sec].map((task) => (
                     <div
                       key={task.id}
-                      className="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-3 flex items-start gap-3 hover:shadow-elev-1 transition-all"
+                      className="group rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-3 flex items-start gap-3 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all"
                     >
                       <input
                         type="checkbox"
@@ -319,10 +323,14 @@ export default function TasksPage() {
 
           {/* Right rail */}
           <aside className="xl:col-span-4 space-y-6">
-            <div className="glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
-              <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20">
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">Atajos</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Crear tareas rápidas para el equipo.</p>
+            <div className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden relative">
+              <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary to-indigo-500" />
+              <div className="px-5 py-4 border-b border-white/55 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20">
+                <div className="flex items-center gap-2">
+                  <span className="material-icons text-primary text-[18px]">bolt</span>
+                  <p className="text-sm font-semibold text-text-main dark:text-white">Atajos</p>
+                </div>
+                <p className="text-xs text-text-muted dark:text-slate-300/80 mt-1">Crear tareas rápidas para el equipo.</p>
               </div>
 
               <div className="p-4 space-y-3">
@@ -373,15 +381,15 @@ export default function TasksPage() {
               </div>
             </div>
 
-            <div className="glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
-              <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white/35 dark:bg-slate-900/20 flex items-center justify-between">
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">Estado</p>
+            <div className="rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/65 dark:bg-surface-dark/40 backdrop-blur-md shadow-elev-1 overflow-hidden">
+              <div className="px-5 py-4 border-b border-white/55 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 flex items-center justify-between">
+                <p className="text-sm font-semibold text-text-main dark:text-white">Estado</p>
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/20">
                   Demo local-first
                 </span>
               </div>
 
-              <div className="p-4 text-sm text-slate-700 dark:text-slate-200 space-y-2">
+              <div className="p-4 text-sm text-text-main dark:text-slate-200 space-y-2">
                 <div className="flex items-center justify-between">
                   <span>Leads</span>
                   <span className="font-semibold tabular-nums">{leads.length}</span>
@@ -400,8 +408,8 @@ export default function TasksPage() {
         </div>
 
         {loading && (
-          <div className="fixed bottom-4 right-4 glass rounded-2xl px-4 py-3 shadow-elev-2 border border-slate-200/60 dark:border-slate-700/60">
-            <div className="text-xs text-slate-600 dark:text-slate-300">Cargando tareas…</div>
+          <div className="fixed bottom-4 right-4 rounded-2xl px-4 py-3 shadow-elev-2 border border-white/70 dark:border-slate-700/60 bg-white/80 dark:bg-surface-dark/70 backdrop-blur-md">
+            <div className="text-xs text-text-muted dark:text-slate-300">Cargando tareas…</div>
           </div>
         )}
       </main>
@@ -412,14 +420,12 @@ export default function TasksPage() {
           <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onClick={() => setOpenNew(false)} />
           <div className="absolute inset-0 flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
             <div
-              className="w-full max-w-2xl rounded-2xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-surface-dark shadow-elev-2"
+              className="w-full max-w-2xl rounded-2xl border border-white/75 dark:border-slate-700/60 bg-white/85 dark:bg-surface-dark/85 backdrop-blur-md shadow-elev-2"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
-                <h2 className="text-base font-semibold text-slate-900 dark:text-white">Nueva tarea</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  Se guardará en modo demo (sin Supabase real aún).
-                </p>
+              <div className="px-5 py-4 border-b border-white/55 dark:border-slate-700/60">
+                <h2 className="text-base font-semibold text-text-main dark:text-white">Nueva tarea</h2>
+                <p className="text-sm text-text-muted dark:text-slate-300/80 mt-1">Se guardará en modo demo (sin Supabase real aún).</p>
               </div>
 
               <div className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -484,10 +490,10 @@ export default function TasksPage() {
                   />
                 </Field>
 
-                <div className="sm:col-span-2 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/40 dark:bg-slate-900/20 p-4">
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                <div className="sm:col-span-2 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/45 dark:bg-slate-900/20 p-4">
+                  <p className="text-xs text-text-muted dark:text-slate-300/80">
                     Vista previa:{' '}
-                    <span className="font-semibold text-slate-900 dark:text-white tabular-nums">
+                    <span className="font-semibold text-text-main dark:text-white tabular-nums">
                       {form.due_date ? formatDateShort(form.due_date) : 'Sin fecha'} ·{' '}
                       {form.related_type === 'none' ? 'Sin vínculo' : `${relatedLabel}${form.related_id ? ' asignado' : ''}`}
                     </span>
@@ -495,7 +501,7 @@ export default function TasksPage() {
                 </div>
               </div>
 
-              <div className="px-5 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+              <div className="px-5 py-4 border-t border-white/55 dark:border-slate-700/60 flex items-center justify-between">
                 <Button variant="secondary" onClick={() => setOpenNew(false)}>
                   Cancelar
                 </Button>
@@ -525,10 +531,10 @@ function QuickRow({ title, subtitle, onClick }: { title: string; subtitle: strin
   return (
     <button
       onClick={onClick}
-      className="w-full text-left rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 p-3 hover:shadow-elev-1 transition-all"
+      className="w-full text-left rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/20 p-3 shadow-sm hover:shadow-elev-1 hover:-translate-y-[1px] transition-all"
     >
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
+        <p className="text-sm font-semibold text-text-main dark:text-white">{title}</p>
         <span className="material-icons text-slate-400 text-[18px]">arrow_forward</span>
       </div>
       <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{subtitle}</p>

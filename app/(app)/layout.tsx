@@ -1,13 +1,39 @@
 'use client';
 
-import Sidebar from '@/components/Sidebar';
 import React, { useEffect, useMemo, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+
+import Sidebar from '@/components/Sidebar';
+import AppTopbar from '@/components/AppTopbar';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
+
+type TopbarConfig = {
+  title: string;
+  subtitle?: string;
+  icon?: string;
+};
+
+function getTopbarConfig(pathname: string): TopbarConfig {
+  // Normaliza rutas (por si vinieran con trailing slash)
+  const p = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
+
+  if (p === '/dashboard') return { title: 'Dashboard', subtitle: 'Resumen de actividad · LG CRM', icon: 'dashboard' };
+  if (p === '/kanban') return { title: 'Leads / Pipeline', subtitle: 'Seguimiento comercial · Kanban', icon: 'contacts' };
+  if (p === '/inventory') return { title: 'Propiedades', subtitle: 'Inventario · Venta / Alquiler', icon: 'real_estate_agent' };
+  if (p === '/gold-list') return { title: 'Gold List', subtitle: 'Clientes con presupuesto confirmado', icon: 'stars' };
+  if (p === '/calendar') return { title: 'Calendario', subtitle: 'Agenda de visitas · Programación', icon: 'calendar_month' };
+  if (p === '/tasks') return { title: 'Tareas', subtitle: 'Operación diaria · Pendientes', icon: 'task' };
+  if (p === '/chat') return { title: 'Chat & Notas', subtitle: 'Soporte interno · Registro', icon: 'chat' };
+  if (p === '/reports') return { title: 'Reportes', subtitle: 'KPIs · Rendimiento', icon: 'analytics' };
+
+  // Fallback
+  return { title: 'Panel', subtitle: 'LG CRM', icon: 'dashboard' };
+}
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
   const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
@@ -44,6 +70,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
+  const topbar = getTopbarConfig(pathname);
+
   return (
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
       <Sidebar />
@@ -56,6 +84,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-amber-400/10 blur-2xl" />
         </div>
 
+        {/* Topbar GLOBAL (Aurora Premium) */}
+        <AppTopbar
+          title={topbar.title}
+          subtitle={topbar.subtitle}
+          icon={topbar.icon}
+          // En esta fase: solo UI global (sin romper lógica de cada página)
+          showRefresh={false}
+          showNew={false}
+        />
+
+        {/* Page content */}
         <div className="relative flex-1 overflow-hidden flex flex-col">{children}</div>
       </main>
     </div>

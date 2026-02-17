@@ -231,52 +231,53 @@ export default function ReportsPage() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Header */}
-      <header className="h-16 glass border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
-        <div className="min-w-0">
-          <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight">Reportes</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Ventana:{' '}
-            <span className="font-semibold text-slate-900 dark:text-white">
-              {range === 'all' ? 'Todo' : range === '7d' ? '7 días' : range === '30d' ? '30 días' : '90 días'}
-            </span>
-            {' · '}
-            Modo demo (local-first)
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="hidden lg:flex items-center gap-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 h-10 shadow-sm">
-            <span className="material-icons text-slate-400 text-[18px]">search</span>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
-              placeholder="Buscar en todo…"
-            />
+      {/* Controls (no header; AppTopbar is global in app/(app)/layout.tsx) */}
+      <div className="px-6 md:px-8 pt-6 md:pt-8 flex flex-col gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Ventana:{' '}
+              <span className="font-semibold text-slate-900 dark:text-white">
+                {range === 'all' ? 'Todo' : range === '7d' ? '7 días' : range === '30d' ? '30 días' : '90 días'}
+              </span>
+              {' · '}
+              Modo demo (local-first)
+            </p>
           </div>
 
-          <select
-            value={range}
-            onChange={(e) => setRange(e.target.value as RangeKey)}
-            className="h-10 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-          >
-            <option value="7d">Últimos 7 días</option>
-            <option value="30d">Últimos 30 días</option>
-            <option value="90d">Últimos 90 días</option>
-            <option value="all">Todo</option>
-          </select>
+          <div className="flex flex-wrap items-center gap-2 justify-end">
+            <div className="flex items-center gap-2 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/20 px-3 h-10 shadow-elev-1 backdrop-blur-md">
+              <span className="material-icons text-slate-400 text-[18px]">search</span>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                className="bg-transparent outline-none text-sm w-56 sm:w-72 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
+                placeholder="Buscar en todo…"
+              />
+            </div>
 
-          <Button variant="outline" className="h-10" onClick={fetchAll}>
-            <span className="material-icons text-[18px]">refresh</span>
-            Actualizar
-          </Button>
+            <select
+              value={range}
+              onChange={(e) => setRange(e.target.value as RangeKey)}
+              className="h-10 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/20 px-3 text-sm shadow-elev-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 backdrop-blur-md"
+            >
+              <option value="7d">Últimos 7 días</option>
+              <option value="30d">Últimos 30 días</option>
+              <option value="90d">Últimos 90 días</option>
+              <option value="all">Todo</option>
+            </select>
+
+            <Button variant="outline" className="h-10" onClick={fetchAll}>
+              <span className="material-icons text-[18px]">refresh</span>
+              Actualizar
+            </Button>
+          </div>
         </div>
-      </header>
+      </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Main */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto px-6 md:px-8 pb-6 md:pb-8 pt-4">
           {/* KPIs */}
           <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <KpiCard

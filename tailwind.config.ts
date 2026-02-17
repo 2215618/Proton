@@ -11,21 +11,36 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Light Premium palette (warm canvas + cobalt)
-        primary: "#246BFD",
-        "primary-hover": "#1F5DE0",
-        "background-light": "#F7F2EB",
+        // Aurora Premium Light palette (Stitch source of truth)
+        // Based on: primary #600AFF + accents blue/teal/coral over slate base.
+        primary: "#600AFF",
+        "primary-hover": "#5208E6",
+        "accent-blue": "#3B82F6",
+        "accent-teal": "#14B8A6",
+        "accent-coral": "#F43F5E",
+
+        "background-light": "#F8FAFC",
         "background-dark": "#101922",
-        "surface-light": "#ffffff",
-        "surface-dark": "#1a2632",
-        "text-main": "#1e293b",
-        "text-muted": "#64748b",
+        "surface-light": "#FFFFFF",
+        "surface-dark": "#1A2632",
+
+        "text-main": "#0F172A",
+        "text-muted": "#64748B",
+
+        // Helpers (glass UI)
+        "glass-border": "rgba(255, 255, 255, 0.6)",
         danger: "#ef4444",
         success: "#22c55e",
         warning: "#f59e0b",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+      },
+      borderRadius: {
+        // Aurora design radii
+        lg: "1rem",
+        xl: "1.5rem",
+        "2xl": "2rem",
       },
       animation: {
         "rotting-pulse": "pulse-red 2s infinite",

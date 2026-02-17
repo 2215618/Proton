@@ -283,81 +283,83 @@ export default function CalendarPage() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Header */}
-      <header className="h-16 glass border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between px-6 shrink-0 z-10 sticky top-0">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="bg-primary/12 p-2 rounded-xl text-primary ring-1 ring-primary/10">
-            <span className="material-icons">event</span>
+      {/* Controls (sin header duplicado; AppTopbar es global en app/(app)/layout.tsx) */}
+      <div className="px-6 md:px-8 pt-6 md:pt-8 flex flex-col gap-3">
+        <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="bg-primary/12 p-2 rounded-xl text-primary ring-1 ring-primary/10">
+              <span className="material-icons">event</span>
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">
+                Agenda de Visitas
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Semana · <span className="font-semibold text-slate-900 dark:text-white">{headerRange}</span>
+                {' · '}
+                <span className="text-slate-400">Prog</span>{' '}
+                <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{weekStats.programadas}</span>
+                {' · '}
+                <span className="text-slate-400">Comp</span>{' '}
+                <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{weekStats.completadas}</span>
+                {' · '}
+                <span className="text-slate-400">Canc</span>{' '}
+                <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{weekStats.canceladas}</span>
+              </p>
+            </div>
           </div>
-          <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">
-              Agenda de Visitas
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Semana · <span className="font-semibold text-slate-900 dark:text-white">{headerRange}</span>
-              {' · '}
-              <span className="text-slate-400">Prog</span>{' '}
-              <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{weekStats.programadas}</span>
-              {' · '}
-              <span className="text-slate-400">Comp</span>{' '}
-              <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{weekStats.completadas}</span>
-              {' · '}
-              <span className="text-slate-400">Canc</span>{' '}
-              <span className="font-semibold text-slate-900 dark:text-white tabular-nums">{weekStats.canceladas}</span>
-            </p>
+
+          <div className="flex items-center gap-2 justify-end flex-wrap">
+            <div className="hidden lg:flex items-center gap-2 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 h-10 shadow-elev-1">
+              <span className="material-icons text-slate-400 text-[18px]">search</span>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
+                placeholder="Buscar lead, zona, propiedad…"
+              />
+            </div>
+
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as StatusFilter)}
+              className="h-10 rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 px-3 text-sm shadow-elev-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 backdrop-blur-md"
+            >
+              <option value="all">Todos</option>
+              <option value="programada">Programadas</option>
+              <option value="completada">Completadas</option>
+              <option value="cancelada">Canceladas</option>
+            </select>
+
+            <div className="hidden sm:flex items-center gap-1">
+              <Button variant="outline" className="h-10" onClick={() => setWeekOffset((v) => v - 1)}>
+                <span className="material-icons text-[18px]">chevron_left</span>
+              </Button>
+              <Button variant="outline" className="h-10" onClick={() => setWeekOffset(0)}>
+                Hoy
+              </Button>
+              <Button variant="outline" className="h-10" onClick={() => setWeekOffset((v) => v + 1)}>
+                <span className="material-icons text-[18px]">chevron_right</span>
+              </Button>
+            </div>
+
+            <Button variant="outline" className="h-10" onClick={fetchAll}>
+              <span className="material-icons text-[18px]">refresh</span>
+              Actualizar
+            </Button>
+
+            <Button className="h-10" onClick={openNewVisit}>
+              <span className="material-icons text-[18px]">add</span>
+              Agendar
+            </Button>
           </div>
         </div>
-
-        <div className="flex items-center gap-2">
-          <div className="hidden lg:flex items-center gap-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 h-10 shadow-sm">
-            <span className="material-icons text-slate-400 text-[18px]">search</span>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
-              placeholder="Buscar lead, zona, propiedad…"
-            />
-          </div>
-
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value as StatusFilter)}
-            className="h-10 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-          >
-            <option value="all">Todos</option>
-            <option value="programada">Programadas</option>
-            <option value="completada">Completadas</option>
-            <option value="cancelada">Canceladas</option>
-          </select>
-
-          <div className="hidden sm:flex items-center gap-1">
-            <Button variant="outline" className="h-10" onClick={() => setWeekOffset((v) => v - 1)}>
-              <span className="material-icons text-[18px]">chevron_left</span>
-            </Button>
-            <Button variant="outline" className="h-10" onClick={() => setWeekOffset(0)}>
-              Hoy
-            </Button>
-            <Button variant="outline" className="h-10" onClick={() => setWeekOffset((v) => v + 1)}>
-              <span className="material-icons text-[18px]">chevron_right</span>
-            </Button>
-          </div>
-
-          <Button variant="outline" className="h-10" onClick={fetchAll}>
-            <span className="material-icons text-[18px]">refresh</span>
-            Actualizar
-          </Button>
-
-          <Button onClick={openNewVisit}>
-            <span className="material-icons text-[18px]">add</span>
-            Agendar
-          </Button>
-        </div>
-      </header>
+      </div>
 
       {/* Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden pt-4">
         {/* Week grid */}
-        <div className="flex-1 p-6 md:p-8 overflow-hidden">
+        <div className="flex-1 px-6 md:px-8 pb-6 md:pb-8 overflow-hidden">
           <div className="glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 h-full overflow-hidden">
             <div className="grid grid-cols-7 divide-x divide-slate-200/60 dark:divide-slate-700/60 h-full">
               {days.map((day) => {
@@ -481,7 +483,7 @@ export default function CalendarPage() {
         </div>
 
         {/* Upcoming panel */}
-        <aside className="hidden xl:flex w-[360px] border-l border-slate-200/60 dark:border-slate-700/60 p-6 md:p-8 overflow-y-auto">
+        <aside className="hidden xl:flex w-[360px] border-l border-slate-200/60 dark:border-slate-700/60 px-6 md:px-8 pb-6 md:pb-8 overflow-y-auto">
           <div className="w-full space-y-6">
             <div className="glass rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-elev-1 overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between bg-white/35 dark:bg-slate-900/20">
@@ -547,8 +549,18 @@ export default function CalendarPage() {
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Micro checklist para no perder cierres.</p>
               </div>
               <div className="p-4 space-y-2 text-sm">
-                <Tip ok={weekStats.programadas > 0} text={weekStats.programadas > 0 ? 'Tienes visitas programadas esta semana' : 'Programa visitas para acelerar cierres'} />
-                <Tip ok={weekStats.canceladas === 0} text={weekStats.canceladas === 0 ? 'Buen ratio: sin cancelaciones en la semana' : 'Revisar causas de cancelación y confirmar con 1h de anticipación'} />
+                <Tip
+                  ok={weekStats.programadas > 0}
+                  text={weekStats.programadas > 0 ? 'Tienes visitas programadas esta semana' : 'Programa visitas para acelerar cierres'}
+                />
+                <Tip
+                  ok={weekStats.canceladas === 0}
+                  text={
+                    weekStats.canceladas === 0
+                      ? 'Buen ratio: sin cancelaciones en la semana'
+                      : 'Revisar causas de cancelación y confirmar con 1h de anticipación'
+                  }
+                />
                 <Tip ok={q.trim().length === 0} text={q.trim().length === 0 ? 'Usa búsqueda para filtrar rápidamente' : 'Filtro aplicado: revisa resultados'} />
               </div>
             </div>
