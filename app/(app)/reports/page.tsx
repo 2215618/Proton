@@ -277,7 +277,7 @@ export default function ReportsPage() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Main */}
-        <main className="flex-1 overflow-y-auto px-6 md:px-8 pb-6 md:pb-8 pt-4">
+        <main className="flex-1 overflow-y-auto aurora-bg-soft px-6 md:px-8 pb-6 md:pb-8 pt-4">
           {/* KPIs */}
           <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <KpiCard
