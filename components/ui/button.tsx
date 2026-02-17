@@ -1,118 +1,79 @@
-import * as React from "react";
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-/**
- * cn local para evitar dependencias (lib/utils, clsx, etc.)
- */
-function cn(...classes: Array<string | undefined | null | false>) {
-  return classes.filter(Boolean).join(" ");
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger"
+  size?: "sm" | "md" | "lg"
 }
 
-type ButtonVariant =
-  | "default"
-  | "secondary"
-  | "outline"
-  | "ghost"
-  | "destructive"
-  | "link";
-
-type ButtonSize = "default" | "sm" | "lg" | "icon";
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  /**
-   * asChild sin Radix Slot: clona un único child (ej: <a/>)
-   * Esto evita instalar dependencias y no rompe builds.
-   */
-  asChild?: boolean;
-}
-
-/**
- * Aurora Premium Button:
- * - default: gradiente violeta tipo maqueta
- * - secondary/outline: glass button (aurora-btn-glass)
- * - focus ring elegante
- * - no cambia textos ni lógica: solo estilos
- */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = "default",
-      size = "default",
-      asChild = false,
-      children,
-      type,
-      ...props
-    },
-    ref
-  ) => {
-    const base =
-      "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full " +
-      "text-sm font-medium transition-all " +
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background-light " +
-      "disabled:pointer-events-none disabled:opacity-50 " +
-      "active:scale-[0.98]";
+  ({ className, variant = "primary", size = "md", ...props }, ref) => {
+    const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
+      primary: cn(
+        // Aurora Premium: subtle gradient + glow
+        "text-white",
+        "bg-primary hover:bg-primary-hover",
+        "shadow-elev-1 hover:shadow-elev-2 active:shadow-elev-1",
+        "relative overflow-hidden",
+        "before:pointer-events-none before:absolute before:inset-0 before:opacity-0 hover:before:opacity-100 before:transition-opacity",
+        "before:bg-[radial-gradient(380px_180px_at_20%_30%,rgba(255,255,255,0.22),transparent_60%)]",
+        "after:pointer-events-none after:absolute after:inset-0 after:opacity-0 hover:after:opacity-100 after:transition-opacity",
+        "after:bg-[linear-gradient(90deg,rgba(255,255,255,0.10),transparent,rgba(255,255,255,0.08))]"
+      ),
+      secondary: cn(
+        "text-text-main dark:text-surface-light",
+        "border border-slate-200/70 dark:border-slate-700/60",
+        "bg-white/70 dark:bg-surface-dark/55 backdrop-blur-md",
+        "shadow-sm hover:shadow-elev-1",
+        "hover:bg-white/85 dark:hover:bg-surface-dark/70"
+      ),
+      outline: cn(
+        "text-primary",
+        "border border-primary/50",
+        "bg-white/10 dark:bg-surface-dark/10 backdrop-blur-md",
+        "hover:bg-primary/10",
+        "shadow-sm hover:shadow-elev-1"
+      ),
+      ghost: cn(
+        "bg-transparent",
+        "text-text-muted hover:text-text-main",
+        "hover:bg-slate-100/80 dark:hover:bg-slate-800/50"
+      ),
+      danger: cn(
+        "text-white",
+        "bg-danger hover:bg-red-600",
+        "shadow-elev-1 hover:shadow-elev-2 active:shadow-elev-1",
+        "relative overflow-hidden",
+        "before:pointer-events-none before:absolute before:inset-0 before:opacity-0 hover:before:opacity-100 before:transition-opacity",
+        "before:bg-[radial-gradient(380px_180px_at_20%_30%,rgba(255,255,255,0.18),transparent_60%)]"
+      ),
+    }
 
-    const sizes: Record<ButtonSize, string> = {
-      default: "h-10 px-4",
-      sm: "h-9 px-3",
-      lg: "h-11 px-5 text-[15px]",
-      icon: "h-10 w-10",
-    };
-
-    const variants: Record<ButtonVariant, string> = {
-      default:
-        // Violeta premium (tipo Stitch Aurora)
-        "bg-gradient-to-r from-primary to-primary-hover text-white " +
-        "shadow-[0_12px_28px_rgba(96,10,255,0.22)] " +
-        "hover:shadow-[0_18px_45px_rgba(96,10,255,0.26)]",
-      secondary:
-        // Glass pill
-        "aurora-btn-glass text-text-main",
-      outline:
-        "aurora-btn-glass text-text-main border border-white/70",
-      ghost:
-        "bg-transparent hover:bg-white/50 text-text-main",
-      destructive:
-        "bg-accent-coral text-white shadow-[0_12px_28px_rgba(244,63,94,0.18)] hover:shadow-[0_18px_45px_rgba(244,63,94,0.22)]",
-      link:
-        "bg-transparent text-primary underline-offset-4 hover:underline",
-    };
-
-    const finalClassName = cn(base, sizes[size], variants[variant], className);
-
-    /**
-     * asChild: clona un único elemento hijo (ej. <a>), manteniendo el className.
-     * Si no cumple (no es ReactElement), cae a <button>.
-     */
-    if (asChild && React.isValidElement(children)) {
-      const child = children as React.ReactElement<any>;
-      const merged = cn(child.props?.className, finalClassName);
-
-      // Evitamos pasar "type" a anchors/divs
-      const { type: _t, ...rest } = props as any;
-
-      return React.cloneElement(child, {
-        ...rest,
-        className: merged,
-      });
+    const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
+      sm: "h-8 px-3 text-xs rounded-lg",
+      md: "h-10 px-4 py-2 text-sm rounded-xl",
+      lg: "h-12 px-6 text-base rounded-xl",
     }
 
     return (
       <button
         ref={ref}
-        className={finalClassName}
-        type={type ?? "button"}
+        className={cn(
+          "inline-flex items-center justify-center gap-2 font-medium",
+          "transition-all duration-150",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-background-dark",
+          "disabled:opacity-50 disabled:pointer-events-none",
+          sizes[size],
+          variants[variant],
+          // micro-interactions (safe)
+          "active:translate-y-[0.5px] active:scale-[0.99]",
+          className
+        )}
         {...props}
-      >
-        {children}
-      </button>
-    );
+      />
+    )
   }
-);
+)
+Button.displayName = "Button"
 
-Button.displayName = "Button";
-
-export { Button };
+export { Button }

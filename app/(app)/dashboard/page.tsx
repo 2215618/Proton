@@ -402,7 +402,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto px-6 md:px-8 pb-6 md:pb-8 pt-4">
+      <main className="flex-1 overflow-y-auto aurora-bg-soft px-6 md:px-8 pb-6 md:pb-8 pt-4">
         {/* KPI grid */}
         <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <KpiCard icon="person_add" label="Nuevos leads (7d)" value={stats.newLeads7d} badge="Captación" />
@@ -585,10 +585,11 @@ export default function DashboardPage() {
           <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onClick={() => setOpenNew(false)} />
           <div className="absolute inset-0 flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
             <div
-              className="w-full max-w-3xl rounded-2xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-surface-dark shadow-elev-2"
+              className="w-full max-w-3xl rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl shadow-elev-2 overflow-hidden relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-start justify-between gap-4">
+              <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[520px] rounded-full bg-primary/15 blur-3xl" />
+              <div className="px-5 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-start justify-between gap-4 bg-white/35 dark:bg-slate-900/15 glass">
                 <div>
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">Crear nuevo</h2>
                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Modo demo (local-first). No cambia estructura.</p>
@@ -616,7 +617,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Nombre *">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.name}
                           onChange={(e) => setLeadForm((s) => ({ ...s, name: e.target.value }))}
                           placeholder="Ej. Ana Torres"
@@ -625,7 +626,7 @@ export default function DashboardPage() {
 
                       <Field label="Teléfono">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.phone}
                           onChange={(e) => setLeadForm((s) => ({ ...s, phone: e.target.value }))}
                           placeholder="+51 9xx xxx xxx"
@@ -635,7 +636,7 @@ export default function DashboardPage() {
                       <Field label="Email">
                         <input
                           type="email"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.email}
                           onChange={(e) => setLeadForm((s) => ({ ...s, email: e.target.value }))}
                           placeholder="correo@ejemplo.com"
@@ -644,7 +645,7 @@ export default function DashboardPage() {
 
                       <Field label="Etapa">
                         <select
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.stage}
                           onChange={(e) => setLeadForm((s) => ({ ...s, stage: e.target.value as LeadStage }))}
                         >
@@ -658,7 +659,7 @@ export default function DashboardPage() {
 
                       <Field label="Fuente">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.source}
                           onChange={(e) => setLeadForm((s) => ({ ...s, source: e.target.value }))}
                           placeholder="Facebook / Referido / WhatsApp…"
@@ -667,7 +668,7 @@ export default function DashboardPage() {
 
                       <Field label="Zona / Ubicación">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.location}
                           onChange={(e) => setLeadForm((s) => ({ ...s, location: e.target.value }))}
                           placeholder="Iquitos - San Juan"
@@ -677,7 +678,7 @@ export default function DashboardPage() {
                       <Field label="Presupuesto mín. (número)">
                         <input
                           inputMode="numeric"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.budget_min}
                           onChange={(e) => setLeadForm((s) => ({ ...s, budget_min: e.target.value.replace(/[^0-9]/g, '') }))}
                           placeholder="Ej. 1500"
@@ -687,7 +688,7 @@ export default function DashboardPage() {
                       <Field label="Presupuesto máx. (número)">
                         <input
                           inputMode="numeric"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={leadForm.budget_max}
                           onChange={(e) => setLeadForm((s) => ({ ...s, budget_max: e.target.value.replace(/[^0-9]/g, '') }))}
                           placeholder="Ej. 2000"
@@ -700,7 +701,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Título *">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.title}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, title: e.target.value }))}
                           placeholder="Ej. Casa moderna con piscina"
@@ -709,7 +710,7 @@ export default function DashboardPage() {
 
                       <Field label="Operación">
                         <select
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.operation}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, operation: e.target.value as any }))}
                         >
@@ -722,7 +723,7 @@ export default function DashboardPage() {
                         <Field label="Precio venta (USD)">
                           <input
                             inputMode="numeric"
-                            className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                            className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                             value={propertyForm.price_sale}
                             onChange={(e) => setPropertyForm((s) => ({ ...s, price_sale: e.target.value.replace(/[^0-9]/g, '') }))}
                             placeholder="Ej. 180000"
@@ -732,7 +733,7 @@ export default function DashboardPage() {
                         <Field label="Precio alquiler (S/)">
                           <input
                             inputMode="numeric"
-                            className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                            className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                             value={propertyForm.price_rent}
                             onChange={(e) => setPropertyForm((s) => ({ ...s, price_rent: e.target.value.replace(/[^0-9]/g, '') }))}
                             placeholder="Ej. 1600"
@@ -742,7 +743,7 @@ export default function DashboardPage() {
 
                       <Field label="Zona / Ubicación">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.location}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, location: e.target.value }))}
                           placeholder="Urbanización Miami"
@@ -751,7 +752,7 @@ export default function DashboardPage() {
 
                       <Field label="Tipo">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.property_type}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, property_type: e.target.value }))}
                           placeholder="Casa / Departamento / Terreno…"
@@ -761,7 +762,7 @@ export default function DashboardPage() {
                       <Field label="Dormitorios">
                         <input
                           inputMode="numeric"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.bedrooms}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, bedrooms: e.target.value.replace(/[^0-9]/g, '') }))}
                           placeholder="3"
@@ -771,7 +772,7 @@ export default function DashboardPage() {
                       <Field label="Baños">
                         <input
                           inputMode="numeric"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.bathrooms}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, bathrooms: e.target.value.replace(/[^0-9]/g, '') }))}
                           placeholder="2"
@@ -781,7 +782,7 @@ export default function DashboardPage() {
                       <Field label="Área (m²)">
                         <input
                           inputMode="numeric"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.area_sqm}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, area_sqm: e.target.value.replace(/[^0-9]/g, '') }))}
                           placeholder="220"
@@ -790,7 +791,7 @@ export default function DashboardPage() {
 
                       <Field label="Dirección">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={propertyForm.address}
                           onChange={(e) => setPropertyForm((s) => ({ ...s, address: e.target.value }))}
                           placeholder="Iquitos, Loreto"
@@ -800,7 +801,7 @@ export default function DashboardPage() {
                       <div className="sm:col-span-2">
                         <Field label="Descripción (opcional)">
                           <textarea
-                            className="min-h-[96px] w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                            className="min-h-[96px] w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 py-2 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                             value={propertyForm.description}
                             onChange={(e) => setPropertyForm((s) => ({ ...s, description: e.target.value }))}
                             placeholder="Breve descripción para el inventario…"
@@ -827,7 +828,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Lead *">
                         <select
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={visitForm.lead_id}
                           onChange={(e) => setVisitForm((s) => ({ ...s, lead_id: e.target.value }))}
                         >
@@ -846,7 +847,7 @@ export default function DashboardPage() {
 
                       <Field label="Propiedad (opcional)">
                         <select
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={visitForm.property_id}
                           onChange={(e) => setVisitForm((s) => ({ ...s, property_id: e.target.value }))}
                         >
@@ -863,7 +864,7 @@ export default function DashboardPage() {
                       <Field label="Fecha y hora *">
                         <input
                           type="datetime-local"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={visitForm.scheduled_for}
                           onChange={(e) => setVisitForm((s) => ({ ...s, scheduled_for: e.target.value }))}
                         />
@@ -871,7 +872,7 @@ export default function DashboardPage() {
 
                       <Field label="Notas (opcional)">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={visitForm.notes}
                           onChange={(e) => setVisitForm((s) => ({ ...s, notes: e.target.value }))}
                           placeholder="Ej. Confirmar 1h antes"
@@ -884,7 +885,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Título *">
                         <input
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={taskForm.title}
                           onChange={(e) => setTaskForm((s) => ({ ...s, title: e.target.value }))}
                           placeholder="Ej. Llamar para confirmar visita"
@@ -894,7 +895,7 @@ export default function DashboardPage() {
                       <Field label="Vence (fecha)">
                         <input
                           type="date"
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={taskForm.due_date}
                           onChange={(e) => setTaskForm((s) => ({ ...s, due_date: e.target.value }))}
                         />
@@ -902,7 +903,7 @@ export default function DashboardPage() {
 
                       <Field label="Vincular a">
                         <select
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={taskForm.related_type}
                           onChange={(e) =>
                             setTaskForm((s) => ({
@@ -920,7 +921,7 @@ export default function DashboardPage() {
 
                       <Field label="Elemento (opcional)">
                         <select
-                          className="h-10 w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                          className="h-10 w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                           value={taskForm.related_id}
                           onChange={(e) => setTaskForm((s) => ({ ...s, related_id: e.target.value }))}
                           disabled={taskForm.related_type === 'none'}
@@ -949,7 +950,7 @@ export default function DashboardPage() {
                       <div className="sm:col-span-2">
                         <Field label="Notas (opcional)">
                           <textarea
-                            className="min-h-[96px] w-full rounded-xl border border-slate-200/70 dark:border-slate-700/60 bg-white dark:bg-slate-900/20 px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                            className="min-h-[96px] w-full rounded-2xl border border-white/70 dark:border-slate-700/60 bg-white/55 dark:bg-slate-900/20 backdrop-blur-md px-3 py-2 text-sm shadow-elev-1 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/40"
                             value={taskForm.notes}
                             onChange={(e) => setTaskForm((s) => ({ ...s, notes: e.target.value }))}
                             placeholder="Ej. Cliente confirmó presupuesto. Enviar 3 opciones."
@@ -961,7 +962,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="px-5 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+              <div className="px-5 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between bg-white/30 dark:bg-slate-900/10 glass">
                 <Button variant="secondary" onClick={() => setOpenNew(false)}>
                   Cancelar
                 </Button>

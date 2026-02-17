@@ -34,25 +34,42 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-50">
+      {/* Backdrop */}
       <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onClick={onClose} />
+
+      {/* Dialog */}
       <div className="absolute inset-0 flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
         <div
           role="dialog"
           aria-modal="true"
-          className={cn("w-full rounded-2xl border border-slate-200 bg-white shadow-xl", SIZE[size])}
+          className={cn(
+            "w-full rounded-2xl border border-white/70 dark:border-slate-700/60 ",
+            "bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl ",
+            "shadow-elev-2 overflow-hidden",
+            SIZE[size]
+          )}
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Subtle aurora glow */}
+          <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-[520px] rounded-full bg-primary/15 blur-3xl" />
+
           {(title || description) && (
-            <div className="border-b border-slate-200/70 px-5 py-4">
-              {title && <h2 className="text-base font-semibold text-slate-900">{title}</h2>}
-              {description && <p className="mt-1 text-sm text-slate-600">{description}</p>}
+            <div className="relative border-b border-slate-200/60 dark:border-slate-700/60 px-5 py-4 bg-white/35 dark:bg-slate-900/15">
+              {title && <h2 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h2>}
+              {description && (
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{description}</p>
+              )}
             </div>
           )}
 
-          <div className="px-5 py-4">{children}</div>
+          <div className="relative px-5 py-4">{children}</div>
 
-          <div className="border-t border-slate-200/70 px-5 py-4 flex items-center justify-end gap-2">
-            {footer ?? <Button variant="secondary" onClick={onClose}>Cerrar</Button>}
+          <div className="relative border-t border-slate-200/60 dark:border-slate-700/60 px-5 py-4 flex items-center justify-end gap-2 bg-white/30 dark:bg-slate-900/10">
+            {footer ?? (
+              <Button variant="secondary" onClick={onClose}>
+                Cerrar
+              </Button>
+            )}
           </div>
         </div>
       </div>

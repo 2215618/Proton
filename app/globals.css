@@ -3,141 +3,183 @@
 @tailwind utilities;
 
 /* =========================
-   Base / App background
-   (Premium, no layout changes)
+   Aurora Premium (Light)
+   Global tokens + helpers
    ========================= */
-@layer base {
-  html {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
 
-  body {
-    @apply bg-background-light text-text-main dark:bg-background-dark dark:text-surface-light;
-    min-height: 100vh;
-  }
+:root {
+  --background: 248 250 252; /* slate-50 */
+  --foreground: 15 23 42; /* slate-900 */
+  --surface: 255 255 255; /* white */
+  --surface-muted: 248 250 252; /* slate-50 */
+  --ring: 59 130 246; /* blue-500 */
 }
 
-/* Subtle premium background (light) — warm canvas + color accents */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(1100px 520px at 12% -10%, rgba(36, 107, 253, 0.12), transparent 60%),
-    radial-gradient(760px 420px at 92% 0%, rgba(124, 58, 237, 0.10), transparent 62%),
-    radial-gradient(760px 420px at 86% 78%, rgba(20, 184, 166, 0.12), transparent 62%),
-    radial-gradient(680px 380px at 18% 86%, rgba(245, 158, 11, 0.12), transparent 64%),
-    linear-gradient(to bottom, #f7f2eb, #f4efe8);
+.dark {
+  --background: 2 6 23; /* slate-950 */
+  --foreground: 226 232 240; /* slate-200 */
+  --surface: 15 23 42; /* slate-900 */
+  --surface-muted: 2 6 23; /* slate-950 */
+  --ring: 59 130 246; /* blue-500 */
 }
 
-/* Dark mode background (kept for compatibility) */
-html.dark body::before {
-  background:
-    radial-gradient(900px 520px at 18% -10%, rgba(36, 107, 253, 0.22), transparent 60%),
-    radial-gradient(760px 460px at 85% 0%, rgba(124, 58, 237, 0.14), transparent 58%),
-    linear-gradient(to bottom, #0b1220, #101922);
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: rgb(var(--foreground));
+  background: rgb(var(--background));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Selection */
 ::selection {
-  background: rgba(36, 107, 253, 0.20);
-}
-
-/* Utility: stable numeric alignment (for prices/KPIs) */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+  background: rgba(59, 130, 246, 0.18);
 }
 
 /* =========================
-   Scrollbar (thin + premium)
+   Aurora background helpers
    ========================= */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+
+.aurora-bg {
+  background:
+    radial-gradient(1200px circle at 20% -10%, rgba(37, 99, 235, 0.14), transparent 55%),
+    radial-gradient(900px circle at 90% 0%, rgba(99, 102, 241, 0.12), transparent 55%),
+    radial-gradient(900px circle at 50% 110%, rgba(16, 185, 129, 0.08), transparent 60%),
+    rgb(var(--background));
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.35);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.55);
-  border: 2px solid transparent;
-  background-clip: padding-box;
+
+.aurora-bg-soft {
+  background:
+    radial-gradient(900px circle at 30% -10%, rgba(37, 99, 235, 0.10), transparent 58%),
+    radial-gradient(780px circle at 90% 10%, rgba(99, 102, 241, 0.09), transparent 60%),
+    rgb(var(--background));
 }
 
 /* =========================
-   Microinteractions (safe)
+   Glass + Elevation
    ========================= */
-.rotting-pulse {
-  animation: pulse-red 2s infinite;
+
+.glass {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-@keyframes pulse-red {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
-  70% { box-shadow: 0 0 0 7px rgba(239, 68, 68, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+.dark .glass {
+  background: rgba(15, 23, 42, 0.32);
+  border: 1px solid rgba(51, 65, 85, 0.55);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .rotting-pulse { animation: none !important; }
+/* Soft shadows (used by pages/components) */
+.shadow-elev-1 {
+  box-shadow:
+    0 1px 0 rgba(15, 23, 42, 0.04),
+    0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
-/* Hide scrollbar helper (used in some panels) */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.shadow-elev-2 {
+  box-shadow:
+    0 1px 0 rgba(15, 23, 42, 0.04),
+    0 18px 60px rgba(15, 23, 42, 0.12);
 }
+
+/* Dark shadow refinement */
+.dark .shadow-elev-1 {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 30px rgba(0, 0, 0, 0.32);
+}
+.dark .shadow-elev-2 {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03),
+    0 18px 70px rgba(0, 0, 0, 0.48);
+}
+
+/* =========================
+   Cards + Panels
+   ========================= */
+
+.card {
+  @apply rounded-2xl;
+}
+
+.card-premium {
+  @apply rounded-2xl;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  box-shadow:
+    0 1px 0 rgba(15, 23, 42, 0.04),
+    0 10px 30px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.dark .card-premium {
+  background: rgba(15, 23, 42, 0.32);
+  border: 1px solid rgba(51, 65, 85, 0.55);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 30px rgba(0, 0, 0, 0.32);
+}
+
+/* Hover polish */
+.hover-lift {
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.hover-lift:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+   Scrollbar utilities
+   ========================= */
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Pretty scrollbar (optional use: add class scrollbar-premium) */
+.scrollbar-premium::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scrollbar-premium::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.55);
+}
+.dark .scrollbar-premium::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border: 3px solid rgba(15, 23, 42, 0.25);
+}
+.scrollbar-premium::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 /* =========================
-   Optional helpers (no breaking changes)
+   Material Icons smoothing
    ========================= */
-.glass {
-  /* "Real product" surface (less blur, more solid) */
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.90));
-  border: 1px solid rgba(15, 23, 42, 0.07);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 14px 28px rgba(15, 23, 42, 0.08);
+.material-icons {
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
 }
-
-html.dark .glass {
-  background: rgba(26, 38, 50, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-}
-
-.shadow-elev-1 { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 30px rgba(15, 23, 42, 0.06); }
-.shadow-elev-2 { box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), 0 18px 48px rgba(15, 23, 42, 0.10); }
 
 /* =========================
-   Aurora grain overlay (premium)
-   - No cambia layout
-   - Sutil (como Stitch Aurora)
+   Small accessibility extras
    ========================= */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  /* SVG noise via feTurbulence */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.06;
+a, button {
+  outline: none;
 }
-
-html.dark body::after {
-  opacity: 0.08;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::after { opacity: 0.04; }
+:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.25);
+  outline-offset: 2px;
 }

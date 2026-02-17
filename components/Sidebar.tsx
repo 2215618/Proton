@@ -1,7 +1,5 @@
 'use client';
-
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
@@ -20,21 +18,7 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = useMemo(() => createClient(), []);
-
-  const [email, setEmail] = useState<string | null>(null);
-
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!alive) return;
-      setEmail(data.user?.email ?? null);
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [supabase]);
+  const supabase = createClient();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -44,29 +28,30 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        'relative w-64 h-full flex-shrink-0 z-20',
-        // Light Aurora (default)
-        'text-slate-900 border-r border-slate-200/60 bg-white/70 backdrop-blur-md shadow-elev-2',
-        // Dark compatible
-        'dark:text-slate-100 dark:border-white/10 dark:bg-[#0B1B2A]'
+        'relative w-64 h-full flex-shrink-0 z-20 text-slate-100',
+        // Aurora Premium shell
+        'border-r border-white/10 dark:border-slate-800/60',
+        'bg-[#0B1B2A]',
+        'shadow-elev-2 overflow-hidden'
       )}
     >
-      {/* Aurora background (light/dark) */}
-      <div className="pointer-events-none absolute inset-0 opacity-70 dark:opacity-75">
-        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/12 blur-2xl" />
-        <div className="absolute top-10 -right-24 h-80 w-80 rounded-full bg-violet-500/12 blur-2xl" />
-        <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-emerald-400/10 blur-2xl" />
-      </div>
+      {/* Aurora glow background */}
+      <div className="pointer-events-none absolute inset-0 opacity-75 bg-[radial-gradient(900px_560px_at_18%_-10%,rgba(36,107,253,0.30),transparent_60%),radial-gradient(760px_520px_at_95%_0%,rgba(124,58,237,0.22),transparent_62%),radial-gradient(740px_520px_at_50%_120%,rgba(16,185,129,0.10),transparent_58%)]" />
+      {/* Subtle vignette */}
+      <div className="pointer-events-none absolute inset-0 opacity-70 bg-[radial-gradient(1200px_800px_at_50%_20%,transparent_30%,rgba(0,0,0,0.55)_100%)]" />
+      {/* Top hairline */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-px bg-white/10" />
 
       {/* Brand */}
-      <div className="relative h-16 flex items-center px-5 border-b border-slate-200/60 dark:border-white/10">
+      <div className="relative h-16 flex items-center px-5 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-primary via-indigo-500 to-violet-500 shadow-elev-1 ring-1 ring-white/30 flex items-center justify-center">
-            <span className="material-icons text-white text-[22px]">home</span>
+          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-primary via-blue-500 to-rose-500 flex items-center justify-center text-white font-bold text-lg shadow-elev-2">
+            <span className="pointer-events-none absolute inset-0 rounded-xl bg-white/10" />
+            LG
           </div>
-          <div className="leading-tight min-w-0">
-            <div className="font-semibold tracking-tight text-slate-900 dark:text-white truncate">LG CRM</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-300/80 truncate">CRM Inmobiliario</div>
+          <div className="leading-tight">
+            <div className="font-semibold tracking-tight text-white">LG Inversiones</div>
+            <div className="text-[11px] text-slate-300/80">CRM Inmobiliario</div>
           </div>
         </div>
       </div>
@@ -81,68 +66,72 @@ export default function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                'group relative flex items-center gap-3 px-3 py-2.5 rounded-2xl font-semibold transition-all duration-150',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30',
+                'group relative flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all duration-150',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30',
+                // Hover motion
+                'hover:translate-x-[1px]',
                 isActive
-                  ? 'bg-violet-50/90 dark:bg-white/10 text-slate-900 dark:text-white shadow-elev-1 ring-1 ring-violet-200/60 dark:ring-white/10'
-                  : 'text-slate-700 dark:text-slate-200/85 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/6',
-                'hover:translate-x-[1px]'
+                  ? 'text-white ring-1 ring-white/12 shadow-elev-1'
+                  : 'text-slate-200/85 hover:text-white hover:bg-white/6'
               )}
             >
+              {/* Active gradient plate */}
               <span
                 className={cn(
-                  'h-9 w-9 rounded-2xl flex items-center justify-center ring-1 transition-colors shrink-0',
+                  'pointer-events-none absolute inset-0 rounded-xl transition-opacity',
                   isActive
-                    ? 'bg-white/70 dark:bg-slate-900/20 text-violet-700 dark:text-[#AFC7FF] ring-violet-200/60 dark:ring-white/10'
-                    : 'bg-white/55 dark:bg-slate-900/10 text-slate-500 dark:text-slate-300/70 ring-slate-200/60 dark:ring-white/10 group-hover:text-slate-700 dark:group-hover:text-slate-200'
+                    ? 'opacity-100 bg-[linear-gradient(90deg,rgba(255,255,255,0.16),rgba(255,255,255,0.06))]'
+                    : 'opacity-0'
                 )}
-              >
-                <span className="material-icons text-[20px]">{item.icon}</span>
-              </span>
+              />
+              {/* Hover glow */}
+              <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity bg-[radial-gradient(420px_220px_at_20%_30%,rgba(36,107,253,0.20),transparent_60%)]" />
 
-              <span className="truncate">{item.label}</span>
-
-              {/* Active marker */}
+              {/* Active indicator bar */}
               <span
                 className={cn(
-                  'pointer-events-none absolute left-1 top-2 bottom-2 w-[3px] rounded-full bg-gradient-to-b from-violet-500 to-indigo-500 transition-opacity',
+                  'pointer-events-none absolute left-1 top-2 bottom-2 w-[3px] rounded-full bg-gradient-to-b from-primary to-indigo-400 transition-opacity',
                   isActive ? 'opacity-100' : 'opacity-0'
                 )}
               />
+
+              <span
+                className={cn(
+                  'relative material-icons text-[20px] transition-colors',
+                  isActive ? 'text-[#AFC7FF]' : 'text-slate-300/70 group-hover:text-slate-200'
+                )}
+              >
+                {item.icon}
+              </span>
+
+              <span className="relative truncate">{item.label}</span>
+
+              {/* Active chevron */}
+              <span
+                className={cn(
+                  'relative ml-auto material-icons text-[18px] text-slate-300/60 transition-opacity',
+                  isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'
+                )}
+              >
+                chevron_right
+              </span>
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer: user + logout */}
-      <div className="relative p-4 border-t border-slate-200/60 dark:border-white/10 space-y-3">
-        <div className="rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/60 dark:bg-slate-900/10 backdrop-blur-md p-3">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 text-white shadow-elev-1 ring-1 ring-white/25 flex items-center justify-center">
-              <span className="material-icons text-[20px]">person</span>
-            </div>
-            <div className="min-w-0 leading-tight">
-              <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                {email ? 'Sesión activa' : 'Usuario'}
-              </div>
-              <div className="text-xs text-slate-500 dark:text-slate-300/80 truncate">
-                {email ? email : 'LG CRM'}
-              </div>
-            </div>
-          </div>
-        </div>
-
+      {/* Footer */}
+      <div className="relative p-4 border-t border-white/10">
         <button
           onClick={handleLogout}
           className={cn(
-            'w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold',
-            'border border-slate-200/60 dark:border-white/10',
-            'bg-white/55 dark:bg-slate-900/10 hover:bg-white/75 dark:hover:bg-white/6',
-            'text-slate-700 hover:text-slate-900 dark:text-slate-200/85 dark:hover:text-white',
-            'transition-all duration-150'
+            'group w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium',
+            'text-slate-200/85 hover:text-white hover:bg-white/6',
+            'transition-all duration-150 hover:translate-x-[1px]',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30'
           )}
         >
-          <span className="material-icons text-[20px] text-slate-500 dark:text-slate-300/70">logout</span>
+          <span className="material-icons text-[20px] text-slate-300/70 group-hover:text-slate-200">logout</span>
           Cerrar Sesión
         </button>
       </div>
